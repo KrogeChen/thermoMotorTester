@@ -1,2 +1,1 @@
-# thermoMotorTeseter
-thermoMotor  Tester
+# thermoMotorTester
