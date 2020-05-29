@@ -16,7 +16,7 @@
 
 ## 器件选型
 
-* [MCU:STM32F103RCT6](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#debugging) 
+* [MCU:STM32F103RCT6](https://github.com/KrogeChen/thermoMotorTester/tree/master/document/STM32F103) 
 * [继电器:HF115-005-2ZS](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#debugging) 
 * [电参:PM9808](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#debugging) 
 * [温控仪:](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#debugging) 
