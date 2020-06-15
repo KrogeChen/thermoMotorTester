@@ -1,23 +1,12 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#include ".\app_cfg.h"
+#ifndef bsp_ledBlink_H
+#define bsp_ledBlink_H
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//name: 通用应用task
+//
 //-----------------------------------------------------------------------------
-void app_general_task(void)
-{
-    static sdt_bool sys_cfged = sdt_false;
-
-    if(sys_cfged)
-    {
-        mde_ledBlink_task();
-        
-    }
-    else
-    {
-        sys_cfged = sdt_true;
-        mde_systemClock_cfg();
-        
-    }
-    
-}
+void bsp_lcd_runStatus_cfg(void);
+void bsp_led_light(void);
+void bsp_led_dark(void);
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#endif 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

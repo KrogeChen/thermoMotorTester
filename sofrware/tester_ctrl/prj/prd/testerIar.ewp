@@ -1000,7 +1000,7 @@
         </option>
         <option>
           <name>Input description</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>Output variant</name>
@@ -1009,7 +1009,7 @@
         </option>
         <option>
           <name>Output description</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -1031,7 +1031,7 @@
         </option>
         <option>
           <name>RTDescription</name>
-          <state></state>
+          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
         </option>
         <option>
           <name>OGProductVersion</name>
@@ -1039,7 +1039,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state></state>
+          <state>7.70.1.11471</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1051,7 +1051,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state></state>
+          <state>Default	None</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -1085,7 +1085,7 @@
         </option>
         <option>
           <name>RTConfigPath2</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
@@ -1111,7 +1111,7 @@
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>-</state>
+          <state>Default	None</state>
         </option>
         <option>
           <name>FPU2</name>
@@ -1256,7 +1256,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
@@ -1301,7 +1301,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1514,7 +1514,7 @@
         </option>
         <option>
           <name>AOutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -1623,7 +1623,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>###Unitialized###</state>
+          <state>testerIar.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -1941,6 +1941,24 @@
   <group>
     <name>mde</name>
     <group>
+      <name>mde_ledBlink</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_ledBlink\depend\bsp_ledBlink.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_ledBlink\depend\bsp_ledBlink.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_ledBlink\mde_ledBlink.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_ledBlink\mde_ledBlink.h</name>
+      </file>
+    </group>
+    <group>
       <name>mde_mRtuSlave</name>
       <group>
         <name>depend</name>
@@ -1952,9 +1970,69 @@
         <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\mde_mRtuSlave.h</name>
       </file>
     </group>
+    <group>
+      <name>mde_sysClock</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_sysClock\depend\bps_system_clock.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_sysClock\depend\bps_system_clock.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_sysClock\depend\snail_data_types.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.h</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>pbc</name>
+    <group>
+      <name>pbc_crc16</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\pbc\pbc_crc16\depend\snail_data_types.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_crc16\pbc_crc16.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_crc16\pbc_crc16.h</name>
+      </file>
+    </group>
+    <group>
+      <name>pbc_libraries</name>
+      <group>
+        <name>cmsis</name>
+        <file>
+          <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\misc.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\pbc\pbc_Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\iar\startup_stm32f10x_hd.s</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\system_stm32f10x.c</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_iwdg.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c</name>
+      </file>
+    </group>
     <group>
       <name>pbc_sysTick</name>
       <group>

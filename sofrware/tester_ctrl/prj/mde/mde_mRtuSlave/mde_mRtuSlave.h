@@ -21,15 +21,25 @@ typedef enum
     mRtu_parity_odd   = 0x02,
 }mRtu_parity_def;
 //-----------------------------------------------------------------------------
+typedef enum
+{
+    mRtu_stopBits_one = 0x00,
+    mRtu_stopBits_two = 0x01,
+}mRtu_stopBits_def;
+//-----------------------------------------------------------------------------
 typedef struct mde_mRtuSlave
 {
-    sdt_int8u        mRtu_address;
-    sdt_int32u       mRtu_baudrate;
-    sdt_int32u       mRtu_sysFrequency;
-    mRtu_parity_def  mRtu_parity;
-    
+    sdt_int8u           mRtu_address;
+    sdt_int32u          mRtu_baudrate;
+    sdt_int32u          mRtu_sysFrequency;
+    mRtu_parity_def     mRtu_parity;
+    mRtu_stopBits_def   mRtu_stopBits;
 }mRtu_parameter_def;
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//name:mRtu任务
+//-----------------------------------------------------------------------------
+void mde_mRtu_task(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:设置modbus参数
 //in: in_solidNum实例号,从0开始
@@ -47,7 +57,7 @@ mRtu_status_def pull_mRtu_register(sdt_int8u in_solidNum,sdt_int16u* out_reg_add
 //in: in_solidNum实例号,从0开始,in_reg_addr 寄存器地址，in_length 长度，*in_pRegDetails 寄存器内容
 //out: sdt_true 推入成功,sdt_false 推入失败
 //-----------------------------------------------------------------------------
-sdt_bool push_mRtu_readReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int16u in_length,sdt_int16u* in_pRegDetails);
+sdt_bool push_mRtu_readReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int16u in_RegDetails);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:modbus写入命令
 //fun:从模块中获取需要写入的寄存器内容
@@ -62,7 +72,6 @@ sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int
 //-----------------------------------------------------------------------------
 void mRtu_answer_event(sdt_int8u in_solidNum);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 #endif
 //报文接收完毕
 //读取命令
