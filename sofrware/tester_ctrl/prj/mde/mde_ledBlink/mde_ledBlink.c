@@ -42,7 +42,7 @@ static blink_oper_def  blink_oper_one;
 //-----------------------------------------------------------------------------
 static void sloid_cfg(void)
 {
-    bsp_lcd_runStatus_cfg();
+    bsp_led_runStatus_cfg();
     blink_oper_one.period_time = 1000;
     blink_oper_one.light_time = 500;
     blink_oper_one.led_to_dark = bsp_led_dark;

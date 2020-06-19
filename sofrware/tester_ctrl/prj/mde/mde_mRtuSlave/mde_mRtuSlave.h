@@ -12,6 +12,7 @@ typedef enum
     mRtuS_none    = 0x00,
     mRtuS_read    = 0x01,
     mRtuS_write   = 0x02,
+    mRtuS_rwBoth  = 0x03,
 }mRtu_status_def;
 //-----------------------------------------------------------------------------
 typedef enum
@@ -61,10 +62,10 @@ sdt_bool push_mRtu_readReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int1
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:modbus写入命令
 //fun:从模块中获取需要写入的寄存器内容
-//in: in_solidNum实例号,从0开始，in_reg_addr 寄存器地址，in_length 长度，*out_pRregDetails 寄存器内容指针
+//in: in_solidNum实例号,从0开始，in_reg_addr 寄存器地址，*out_pRregDetails 寄存器内容指针
 //out: sdt_true 获取成功,sdt_false 获取失败
 //-----------------------------------------------------------------------------
-sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int16u in_length,sdt_int16u* out_pRregDetails);
+sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int16u* out_pRregDetails);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:应答事件
 //fun:modbus总线开始应答

@@ -15,7 +15,7 @@ void bsp_led_light(void)
     GPIO_ResetBits(GPIOA,GPIO_Pin_12);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void bsp_lcd_runStatus_cfg(void)
+void bsp_led_runStatus_cfg(void)
 {
     GPIO_InitTypeDef   GPIO_Init_Data;
         
@@ -27,7 +27,6 @@ void bsp_lcd_runStatus_cfg(void)
     GPIO_Init(GPIOA,&GPIO_Init_Data);
     GPIO_ResetBits(GPIOA,GPIO_Pin_12);   //输出低电平  
 //-----------------------------------------------------------------------------
-
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

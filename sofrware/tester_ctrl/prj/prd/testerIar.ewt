@@ -2326,6 +2326,12 @@
       <name>$PROJ_DIR$\..\app\app_general.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\app\app_modbus.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_modbus.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\main.c</name>
     </file>
   </group>
@@ -2353,6 +2359,18 @@
       <name>mde_mRtuSlave</name>
       <group>
         <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\depend\bsp_mRtuSlave.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\depend\bsp_mRtuSlave.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\depend\snail_data_types.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\depend\snail_macro.h</name>
+        </file>
       </group>
       <file>
         <name>$PROJ_DIR$\..\mde\mde_mRtuSlave\mde_mRtuSlave.c</name>
@@ -2401,6 +2419,15 @@
       </file>
     </group>
     <group>
+      <name>pbc_dataConvert</name>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_dataConvert\pbc_dataConvert.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_dataConvert\pbc_dataConvert.h</name>
+      </file>
+    </group>
+    <group>
       <name>pbc_libraries</name>
       <group>
         <name>cmsis</name>
@@ -2422,6 +2449,12 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\pbc\pbc_Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c</name>
       </file>
     </group>
     <group>
