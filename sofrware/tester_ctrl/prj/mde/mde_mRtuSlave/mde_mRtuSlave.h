@@ -45,13 +45,20 @@ void mde_mRtu_task(void);
 //name:设置modbus参数
 //in: in_solidNum实例号,从0开始
 //-----------------------------------------------------------------------------
-void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def in_parameter);
+void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def* in_parameter);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:获取modbus register 当前状态
 //in: in_solidNum实例号,从0开始,*out_reg_addr 地址指针，*out_length 长度指针
 //out: mRtuS_none 无,mRtuS_read 读数据,mRtuS_write 写数据
 //-----------------------------------------------------------------------------
 mRtu_status_def pull_mRtu_register(sdt_int8u in_solidNum,sdt_int16u* out_reg_addr,sdt_int16u* out_length);
+//-----------------------------------------------------------------------------
+//name:获取modbus register 写入的内容
+//in: in_solidNum实例号,从0开始,*out_reg_addr 地址指针，*out_length 长度指针
+//out: 
+//-----------------------------------------------------------------------------
+void pull_mRtu_register_wb(sdt_int8u in_solidNum,sdt_int16u* out_reg_addr,sdt_int16u* out_length);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:modbus读取命令
 //fun:把modbus需要读取的数据，推入modbus模块

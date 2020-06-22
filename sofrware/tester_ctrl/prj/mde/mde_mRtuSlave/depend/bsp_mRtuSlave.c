@@ -6,7 +6,6 @@
 macro_creat_queueBasce(uart4_queue_rxd,64);
 macro_creat_queueBasce(uart4_queue_txd,255);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-static sdt_int16u rxd_depart_cnt;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //中断服务函数
 //-----------------------------------------------------------------------------
@@ -31,7 +30,7 @@ void UART4_IRQHandler(void)
        
         sdt_int8u n_bytes;
         macro_pull_queueBasce_bytes(uart4_queue_rxd,n_bytes);
-        rxd_depart_cnt = TIM3->CNT;
+
         sdt_bool queunIsFull;
         macro_pull_queueBasce_full(uart4_queue_rxd,n_bytes,queunIsFull);
         if(queunIsFull)
@@ -145,15 +144,20 @@ void bsp_uart4_cfg(void)
 sdt_bool bsp_pull_oneByte_uart4_rxd(sdt_int8u* out_byte_details)
 {
     sdt_int8u n_bytes,rd_byte_details;
+    __disable_interrupt();
     macro_pull_queueBasce_bytes(uart4_queue_rxd,n_bytes);
+    __enable_interrupt();
     if(n_bytes)
     {
+        __disable_interrupt();
         macro_pull_queueBasce_data(uart4_queue_rxd,n_bytes,rd_byte_details);
+        __enable_interrupt();
         *out_byte_details = rd_byte_details;
         return(sdt_true);
     }
     else
     {
+        
         return(sdt_false);
     }
 }
@@ -164,7 +168,9 @@ sdt_bool bsp_pull_oneByte_uart4_rxd(sdt_int8u* out_byte_details)
 sdt_bool bsp_push_oneByte_uart4_txd(sdt_int8u in_byte_details)
 {
     sdt_int8u n_bytes;
+    __disable_interrupt();
     macro_pull_queueBasce_bytes(uart4_queue_txd,n_bytes);
+    __enable_interrupt();
     sdt_bool queunIsFull;
     macro_pull_queueBasce_full(uart4_queue_txd,n_bytes,queunIsFull);
     if(queunIsFull)
@@ -173,7 +179,9 @@ sdt_bool bsp_push_oneByte_uart4_txd(sdt_int8u in_byte_details)
     }
     else
     {
+        __disable_interrupt();
         macro_push_queueBasce_data(uart4_queue_txd,n_bytes,in_byte_details);
+        __enable_interrupt();
         USART_ITConfig(UART4,USART_IT_TXE,ENABLE);
         return(sdt_true);
     }
@@ -183,25 +191,13 @@ sdt_int16u test[32];
 sdt_int8u test_idx = 0;
 sdt_bool bsp_uart4_busFree(sdt_int8u t_char_dis)
 {
-  static sdt_int16u rd_rxd_depart_cnt;
-  static  sdt_int16u rd_cnt;
-  static  sdt_int16u free_cnt;
-    __disable_interrupt();
-    rd_rxd_depart_cnt = 0;//rxd_depart_cnt;
+    static sdt_int16u rd_rxd_depart_cnt;
+    static  sdt_int16u rd_cnt;
+    static  sdt_int16u free_cnt;
+
     rd_cnt = TIM3->CNT;
-    __enable_interrupt();
-   // if(rd_cnt > rd_rxd_depart_cnt)
-   // {
-        free_cnt = rd_cnt - rd_rxd_depart_cnt;
-  //  }
-//    else
-  //  {
-      //  free_cnt = (0xffff - rd_rxd_depart_cnt) + rd_cnt;
-//        if(free_cnt > 1820)  //9600 3.5T 1040*3.25/2
-//        {
-//            return(sdt_true);
-//        }
-  //  }
+    free_cnt = rd_cnt;
+
     if(free_cnt > 1820)  //9600 3.5T 1040*3.25/2
     {
         test[test_idx] = free_cnt;
@@ -254,4 +250,37 @@ void bps_uart4_into_transmit(void)
 {
     GPIO_SetBits(GPIOA,GPIO_Pin_15);
 }
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void bsp_uart_phyReCfg(sdt_int32u sys_fre,sdt_int32u baud_rate,sdt_int8u parity,sdt_int8u stop_bits)
+{
+    static sdt_int32u bak_sys_fre = 0,bak_baud_rate = 0;
+    static sdt_int8u bak_parity = 0,bak_stop_bits = 0;
+    USART_InitTypeDef   USART4_INIT;
+
+   // if()
+
+    USART_DeInit(UART4);
+    USART4_INIT.USART_BaudRate=9600;
+    USART4_INIT.USART_Parity=USART_Parity_No;
+    USART4_INIT.USART_WordLength=USART_WordLength_8b;    
+
+    USART4_INIT.USART_StopBits=USART_StopBits_1;
+    USART4_INIT.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
+    USART4_INIT.USART_Mode=(USART_Mode_Rx+USART_Mode_Tx);  //收发使能
+//-----------------------------------------------------------------------------
+    USART_Init(UART4,&USART4_INIT);
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void get_queue_data(sdt_int8u* out_inx,sdt_int8u* out_otx,sdt_int8u* out_nbyte)
+{
+    __disable_interrupt();
+    *out_inx = uart4_queue_rxd_in_idx;
+    *out_otx = uart4_queue_rxd_out_idx;
+    *out_nbyte = uart4_queue_rxd_bytes;
+    __enable_interrupt();
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

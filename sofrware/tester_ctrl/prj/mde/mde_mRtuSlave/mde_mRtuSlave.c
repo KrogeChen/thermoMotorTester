@@ -15,7 +15,6 @@ typedef enum
 {
     mRunS_idle             = 0x00,
     mRunS_receive_wait,
-    mRunS_receive_first,
     mRunS_receive_data,
     mRunS_receive_end,
     mRunS_transmit_str,
@@ -23,7 +22,6 @@ typedef enum
     mRunS_transmit_data,
     mRunS_transmit_stop,
     mRunS_transmit_end,
-
 }modbus_runStatus_def;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //modbus操作结构体
@@ -54,8 +52,6 @@ typedef struct
     void (*phy_into_transmit_status)(void);
     sdt_bool (*push_transmit_byte)(sdt_int8u in_tByte);
     sdt_bool (*pull_transmit_complete)(void);
-
-
 }modbus_oper_def;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -73,13 +69,14 @@ static sdt_bool modbus_receive_protocol(modbus_oper_def* mix_oper)
         return(sdt_false);
     }
     else
-    {
-        if((mix_oper->mRtu_parameter.mRtu_address == mix_oper->receive_buff[0]) || (0xFE == mix_oper->receive_buff[0]))  //address
+    { 
+        if((mix_oper->mRtu_parameter.mRtu_address == mix_oper->receive_buff[0]) || (0xFE == mix_oper->receive_buff[0]) || (0xFA == mix_oper->receive_buff[0]))  //address
         {
             sdt_int8u crc_value[2];
             Crc16CalculateOfByte(&mix_oper->receive_buff[0],(rd_length-2),&crc_value[0]);
-            if((crc_value[0] == mix_oper->receive_buff[rd_length-2]) && (crc_value[1] == mix_oper->receive_buff[rd_length-1]))//crc
+            if((crc_value[1] == mix_oper->receive_buff[rd_length-2]) && (crc_value[0] == mix_oper->receive_buff[rd_length-1]))//crc
             {
+                
                 if(0x03 == mix_oper->receive_buff[1])
                 {
                     mix_oper->readReg_addr = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[2]);
@@ -139,7 +136,7 @@ static sdt_bool modbus_receive_protocol(modbus_oper_def* mix_oper)
                 }
                 return(sdt_true);
             }
-        }        
+        }
     }
     return(sdt_false);
 }
@@ -164,6 +161,7 @@ static void modbus_operation_task(modbus_oper_def* mix_oper)
                 mix_oper->receive_buff[0] = receive_byte;
                 mix_oper->rev_index = 1;
                 mix_oper->moo_runStutus = mRunS_receive_data;
+                mix_oper->restart_busFree_timer();
             }
             break;
         }
@@ -314,6 +312,40 @@ static sdt_bool make_readReg_buff(modbus_oper_def* mix_oper,sdt_int16u in_reg_ad
 //-----------------------------------------------------------------------------
 static sdt_bool get_writeReg_buff(modbus_oper_def* mix_oper,sdt_int16u in_reg_addr,sdt_int16u* out_regDetails)
 {
+    if(in_reg_addr < (mix_oper->writeReg_addr))
+    {
+        return(sdt_false);
+    }
+    else
+    {
+        sdt_int8u buff_index;
+        if(0x06 == mix_oper->receive_buff[1])
+        {
+            buff_index = 4;
+        }
+        else if(0x10 == mix_oper->receive_buff[1])
+        {
+            buff_index = 7;
+        }
+        else if(0x17 == mix_oper->receive_buff[1])
+        {
+            buff_index = 11;
+        }
+        else
+        {
+            return(sdt_false);
+        }
+
+        sdt_int16u dis_r = in_reg_addr - (mix_oper->writeReg_addr);
+        while(dis_r)
+        {
+            buff_index = buff_index + 2;
+            dis_r = dis_r-1;
+        }
+        *out_regDetails = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[buff_index]);
+        return(sdt_true);
+    }
+
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static void enable_answer_message(modbus_oper_def* mix_oper)
@@ -324,7 +356,11 @@ static void enable_answer_message(modbus_oper_def* mix_oper)
     }
     else
     {
-        Crc16CalculateOfByte(&mix_oper->transmit_buff[0],(sdt_int16u)mix_oper->transmit_length,&mix_oper->transmit_buff[mix_oper->transmit_length]);//crc
+        sdt_int8u crc_value[2];
+        
+        Crc16CalculateOfByte(&mix_oper->transmit_buff[0],(sdt_int16u)mix_oper->transmit_length,&crc_value[0]);//crc
+        mix_oper->transmit_buff[mix_oper->transmit_length] = crc_value[1];
+        mix_oper->transmit_buff[mix_oper->transmit_length+1] = crc_value[0];
         mix_oper->transmit_length += 2;
         mix_oper->moo_runStutus = mRunS_transmit_str;       
     }
@@ -367,11 +403,15 @@ void mde_mRtu_task(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:设置modbus参数
 //-----------------------------------------------------------------------------
-void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def in_parameter)
+void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def* in_parameter)
 {
     if(0 == in_solidNum)
     {
-
+        modbus_oper_one.mRtu_parameter.mRtu_address = in_parameter->mRtu_address;
+        modbus_oper_one.mRtu_parameter.mRtu_baudrate = in_parameter->mRtu_baudrate;
+        modbus_oper_one.mRtu_parameter.mRtu_parity = in_parameter->mRtu_parity;
+        modbus_oper_one.mRtu_parameter.mRtu_stopBits = in_parameter->mRtu_stopBits;
+        modbus_oper_one.mRtu_parameter.mRtu_sysFrequency = in_parameter->mRtu_sysFrequency;
     }
     else
     {
@@ -463,7 +503,10 @@ sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int
 
     if(0 == in_solidNum)
     {
-
+        if(get_writeReg_buff(&modbus_oper_one,in_reg_addr,out_pRregDetails))
+        {
+            complete = sdt_true;
+        }
     }
     else
     {

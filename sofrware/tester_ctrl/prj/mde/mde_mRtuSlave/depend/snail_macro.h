@@ -86,7 +86,7 @@ do\
 #define macro_pull_queueBasce_data(in_queueName,in_bytes,out_data) \
 do\
 {\
-    if(0 != in_bytes)\
+    if(0 != in_queueName##_bytes)\
 	{\
         sdt_int8u the_out_index;\
         the_out_index = in_queueName##_out_idx;\
