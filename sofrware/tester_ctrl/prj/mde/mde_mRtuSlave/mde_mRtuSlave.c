@@ -93,6 +93,7 @@ static sdt_bool modbus_receive_protocol(modbus_oper_def* mix_oper)
                 {
                     mix_oper->writeReg_addr = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[2]);
                     mix_oper->writeReg_length = 1;
+                    
                     mix_oper->transmit_buff[0] = mix_oper->mRtu_parameter.mRtu_address;
                     mix_oper->transmit_buff[1] = 0x06;
                     mix_oper->transmit_buff[2] = mix_oper->receive_buff[2];
@@ -107,6 +108,7 @@ static sdt_bool modbus_receive_protocol(modbus_oper_def* mix_oper)
                 {
                     mix_oper->writeReg_addr = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[2]);
                     mix_oper->writeReg_length = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[4]);
+                    
                     mix_oper->transmit_buff[0] = mix_oper->mRtu_parameter.mRtu_address;
                     mix_oper->transmit_buff[1] = 0x10;
                     mix_oper->transmit_buff[2] = mix_oper->receive_buff[2];
@@ -123,6 +125,7 @@ static sdt_bool modbus_receive_protocol(modbus_oper_def* mix_oper)
                     mix_oper->readReg_length = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[4]);
                     mix_oper->writeReg_addr = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[6]);
                     mix_oper->writeReg_length = pbc_arrayToInt16u_bigEndian(&mix_oper->receive_buff[8]);
+                    
                     mix_oper->transmit_buff[0] = mix_oper->mRtu_parameter.mRtu_address;
                     mix_oper->transmit_buff[1] = 0x17;
                     mix_oper->transmit_buff[2] = mix_oper->readReg_length * 2;
@@ -178,7 +181,7 @@ static void modbus_operation_task(modbus_oper_def* mix_oper)
                 }
                 else
                 {
-                    if(mix_oper->pull_busFree(25))  //标准3.5T,检测2.5T视为报文完成
+                    if(mix_oper->pull_busFree(20))  //标准3.5T,检测2.0T视为报文完成
                     {
                         if(modbus_receive_protocol(mix_oper))
                         {
@@ -212,7 +215,7 @@ static void modbus_operation_task(modbus_oper_def* mix_oper)
         }
         case mRunS_transmit_35T:
         {
-            if(mix_oper->pull_busFree(50))  //5T
+            if(mix_oper->pull_busFree(45))  //5T
             {
                 mix_oper->moo_runStutus = mRunS_transmit_data;
                 mix_oper->transmit_index = 0;
@@ -256,7 +259,7 @@ static void modbus_operation_task(modbus_oper_def* mix_oper)
         }
         case mRunS_transmit_end:
         {
-            if(mix_oper->pull_busFree(50)) 
+            if(mix_oper->pull_busFree(45)) 
             {
                 mix_oper->phy_into_receive();
                 mix_oper->moo_runStutus = mRunS_receive_wait;
@@ -367,20 +370,22 @@ static void enable_answer_message(modbus_oper_def* mix_oper)
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 //+++++++++++++++++++++++++++++++solid+++++++++++++++++++++++++++++++++++++++++
+#define max_solid    1
 //-----------------------------------------------------------------------------
-static modbus_oper_def modbus_oper_one;
+static modbus_oper_def modbus_oper_solid[max_solid];
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static void modbus_solid_cfg(void)
 {
+//-----------------------------------------------------------------------------
     bsp_uart4_cfg();
-    modbus_oper_one.pull_receive_byte = bsp_pull_oneByte_uart4_rxd;
-    modbus_oper_one.push_transmit_byte = bsp_push_oneByte_uart4_txd;
-    modbus_oper_one.pull_busFree = bsp_uart4_busFree;
-    modbus_oper_one.restart_busFree_timer = bsp_restart_tim3;
-    modbus_oper_one.phy_into_receive = bps_uart4_into_receive;
-    modbus_oper_one.phy_into_transmit_status = bps_uart4_into_transmit;
-    modbus_oper_one.pull_transmit_complete =bsp_pull_uart4_txd_cmp;
-    
+    modbus_oper_solid[0].pull_receive_byte = bsp_pull_oneByte_uart4_rxd;
+    modbus_oper_solid[0].push_transmit_byte = bsp_push_oneByte_uart4_txd;
+    modbus_oper_solid[0].pull_busFree = bsp_uart4_busFree;
+    modbus_oper_solid[0].restart_busFree_timer = bsp_restart_tim3;
+    modbus_oper_solid[0].phy_into_receive = bps_uart4_into_receive;
+    modbus_oper_solid[0].phy_into_transmit_status = bps_uart4_into_transmit;
+    modbus_oper_solid[0].pull_transmit_complete =bsp_pull_uart4_txd_cmp;
+//-----------------------------------------------------------------------------
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++interface+++++++++++++++++++++++++++++++++++
@@ -392,7 +397,11 @@ void mde_mRtu_task(void)
 
     if(cfged)
     {
-        modbus_operation_task(&modbus_oper_one);
+        sdt_int8u i;
+        for(i = 0;i < max_solid;i ++)
+        {
+            modbus_operation_task(&modbus_oper_solid[i]);
+        }
     }
     else
     {
@@ -405,13 +414,13 @@ void mde_mRtu_task(void)
 //-----------------------------------------------------------------------------
 void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def* in_parameter)
 {
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
-        modbus_oper_one.mRtu_parameter.mRtu_address = in_parameter->mRtu_address;
-        modbus_oper_one.mRtu_parameter.mRtu_baudrate = in_parameter->mRtu_baudrate;
-        modbus_oper_one.mRtu_parameter.mRtu_parity = in_parameter->mRtu_parity;
-        modbus_oper_one.mRtu_parameter.mRtu_stopBits = in_parameter->mRtu_stopBits;
-        modbus_oper_one.mRtu_parameter.mRtu_sysFrequency = in_parameter->mRtu_sysFrequency;
+        modbus_oper_solid[in_solidNum].mRtu_parameter.mRtu_address = in_parameter->mRtu_address;
+        modbus_oper_solid[in_solidNum].mRtu_parameter.mRtu_baudrate = in_parameter->mRtu_baudrate;
+        modbus_oper_solid[in_solidNum].mRtu_parameter.mRtu_parity = in_parameter->mRtu_parity;
+        modbus_oper_solid[in_solidNum].mRtu_parameter.mRtu_stopBits = in_parameter->mRtu_stopBits;
+        modbus_oper_solid[in_solidNum].mRtu_parameter.mRtu_sysFrequency = in_parameter->mRtu_sysFrequency;
     }
     else
     {
@@ -425,21 +434,21 @@ void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def* in_parameter)
 //-----------------------------------------------------------------------------
 mRtu_status_def pull_mRtu_register(sdt_int8u in_solidNum,sdt_int16u* out_reg_addr,sdt_int16u* out_length)
 {
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
         mRtu_status_def rd_status;
 
-        rd_status = modbus_oper_one.mRtu_status;
-        modbus_oper_one.mRtu_status = mRtuS_none;
+        rd_status = modbus_oper_solid[in_solidNum].mRtu_status;
+        modbus_oper_solid[in_solidNum].mRtu_status = mRtuS_none;
         if((mRtuS_read == rd_status) || (mRtuS_rwBoth == rd_status))
         {
-            *out_reg_addr = modbus_oper_one.readReg_addr;
-            *out_length = modbus_oper_one.readReg_length;
+            *out_reg_addr = modbus_oper_solid[in_solidNum].readReg_addr;
+            *out_length = modbus_oper_solid[in_solidNum].readReg_length;
         }
         else if(mRtuS_write == rd_status)
         {
-            *out_reg_addr = modbus_oper_one.writeReg_addr;
-            *out_length = modbus_oper_one.writeReg_length;
+            *out_reg_addr = modbus_oper_solid[in_solidNum].writeReg_addr;
+            *out_length = modbus_oper_solid[in_solidNum].writeReg_length;
         }
         return(rd_status);
     }
@@ -453,10 +462,10 @@ mRtu_status_def pull_mRtu_register(sdt_int8u in_solidNum,sdt_int16u* out_reg_add
 //-----------------------------------------------------------------------------
 void pull_mRtu_register_wb(sdt_int8u in_solidNum,sdt_int16u* out_reg_addr,sdt_int16u* out_length)
 {
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
-        *out_reg_addr = modbus_oper_one.writeReg_addr;
-        *out_length = modbus_oper_one.writeReg_length;
+        *out_reg_addr = modbus_oper_solid[in_solidNum].writeReg_addr;
+        *out_length = modbus_oper_solid[in_solidNum].writeReg_length;
     }
     else
     {
@@ -473,9 +482,9 @@ sdt_bool push_mRtu_readReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int1
 {
     sdt_bool complete = sdt_false;
 
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
-        if(make_readReg_buff(&modbus_oper_one,in_reg_addr,in_RegDetails))
+        if(make_readReg_buff(&modbus_oper_solid[in_solidNum],in_reg_addr,in_RegDetails))
         {
             complete = sdt_true;
         }
@@ -501,9 +510,9 @@ sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int
 {
     sdt_bool complete = sdt_false;
 
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
-        if(get_writeReg_buff(&modbus_oper_one,in_reg_addr,out_pRregDetails))
+        if(get_writeReg_buff(&modbus_oper_solid[in_solidNum],in_reg_addr,out_pRregDetails))
         {
             complete = sdt_true;
         }
@@ -521,9 +530,9 @@ sdt_bool pull_mRtu_writeReg(sdt_int8u in_solidNum,sdt_int16u in_reg_addr,sdt_int
 //-----------------------------------------------------------------------------
 void mRtu_answer_event(sdt_int8u in_solidNum)
 {
-    if(0 == in_solidNum)
+    if(in_solidNum < max_solid)
     {
-        enable_answer_message(&modbus_oper_one);
+        enable_answer_message(&modbus_oper_solid[in_solidNum]);
     }
     else
     {

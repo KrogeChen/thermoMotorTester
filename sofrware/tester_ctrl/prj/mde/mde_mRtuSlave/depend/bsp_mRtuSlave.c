@@ -189,6 +189,7 @@ sdt_bool bsp_push_oneByte_uart4_txd(sdt_int8u in_byte_details)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 sdt_int16u test[32];
 sdt_int8u test_idx = 0;
+//-----------------------------------------------------------------------------
 sdt_bool bsp_uart4_busFree(sdt_int8u t_char_dis)
 {
     static sdt_int16u rd_rxd_depart_cnt;
@@ -198,7 +199,10 @@ sdt_bool bsp_uart4_busFree(sdt_int8u t_char_dis)
     rd_cnt = TIM3->CNT;
     free_cnt = rd_cnt;
 
-    if(free_cnt > 1820)  //9600 3.5T 1040*3.25/2
+    sdt_int16u limit_ft;
+    
+    limit_ft = 104*t_char_dis/2;  //9600 T == 104us
+    if(free_cnt > limit_ft)  //9600 3.5T 1040*3.25/2
     {
         test[test_idx] = free_cnt;
         test_idx ++;
