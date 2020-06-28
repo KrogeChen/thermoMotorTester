@@ -1,14 +1,11 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#ifndef bsp_ledBlink_H
-#define bsp_ledBlink_H
+#ifndef mde_digitInput_H
+#define mde_digitInput_H
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//-----------------------------------------------------------------------------
-void bsp_led_runStatus_cfg(void);
-void bsp_led_light(void);
-void bsp_led_dark(void);
-void bsp_led_s_dark(void);
-void bsp_led_s_light(void);
+#ifndef snail_data_types
+    #include ".\depend\snail_data_types.h"
+#endif
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#endif 
+
+#endif
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

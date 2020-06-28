@@ -87,11 +87,11 @@ void bsp_uart4_cfg(void)
     GPIO_USART4INIT.GPIO_Mode=GPIO_Mode_IPU;               //输入上拉
     GPIO_Init(GPIOC,&GPIO_USART4INIT);
 //-----------------------------------------------------------------------------  
-    GPIO_USART4INIT.GPIO_Pin=GPIO_Pin_15;                   //PA15 TRSEL
-    GPIO_USART4INIT.GPIO_Speed=GPIO_Speed_2MHz;
-    GPIO_USART4INIT.GPIO_Mode=GPIO_Mode_Out_PP;            //推挽输出
-    GPIO_Init(GPIOA,&GPIO_USART4INIT);
-    GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+//    GPIO_USART4INIT.GPIO_Pin=GPIO_Pin_15;                   //PA15 TRSEL
+//    GPIO_USART4INIT.GPIO_Speed=GPIO_Speed_2MHz;
+//    GPIO_USART4INIT.GPIO_Mode=GPIO_Mode_Out_PP;            //推挽输出
+//    GPIO_Init(GPIOA,&GPIO_USART4INIT);
+//    GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 //-----------------------------------------------------------------------------   
     USART_DeInit(UART4);
     USART4_INIT.USART_BaudRate=9600;
@@ -192,7 +192,7 @@ sdt_int8u test_idx = 0;
 //-----------------------------------------------------------------------------
 sdt_bool bsp_uart4_busFree(sdt_int8u t_char_dis)
 {
-    static sdt_int16u rd_rxd_depart_cnt;
+    //static sdt_int16u rd_rxd_depart_cnt;
     static  sdt_int16u rd_cnt;
     static  sdt_int16u free_cnt;
 
@@ -247,18 +247,18 @@ sdt_bool bsp_pull_uart4_txd_cmp(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void bps_uart4_into_receive(void)
 {
-    GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+//    GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void bps_uart4_into_transmit(void)
 {
-    GPIO_SetBits(GPIOA,GPIO_Pin_15);
+//    GPIO_SetBits(GPIOA,GPIO_Pin_15);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void bsp_uart_phyReCfg(sdt_int32u sys_fre,sdt_int32u baud_rate,sdt_int8u parity,sdt_int8u stop_bits)
 {
-    static sdt_int32u bak_sys_fre = 0,bak_baud_rate = 0;
-    static sdt_int8u bak_parity = 0,bak_stop_bits = 0;
+    //static sdt_int32u bak_sys_fre = 0,bak_baud_rate = 0;
+    //static sdt_int8u bak_parity = 0,bak_stop_bits = 0;
     USART_InitTypeDef   USART4_INIT;
 
    // if()

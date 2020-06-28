@@ -38,16 +38,23 @@ static void ledBlink_operation_task(blink_oper_def* lb_oper)
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-static blink_oper_def  blink_oper_one;
+#define max_solid    2
+//----------------------------------------------------------------------------
+static blink_oper_def  blink_oper_sloid[max_solid];
 //-----------------------------------------------------------------------------
 static void sloid_cfg(void)
 {
     bsp_led_runStatus_cfg();
-    blink_oper_one.period_time = 1000;
-    blink_oper_one.light_time = 500;
-    blink_oper_one.led_to_dark = bsp_led_dark;
-    blink_oper_one.led_to_light = bsp_led_light;
+    blink_oper_sloid[0].period_time = 1000;
+    blink_oper_sloid[0].light_time = 500;
+    blink_oper_sloid[0].led_to_dark = bsp_led_dark;
+    blink_oper_sloid[0].led_to_light = bsp_led_light;
 //-----------------------------------------------------------------------------
+    blink_oper_sloid[1].period_time = 1000;
+    blink_oper_sloid[1].light_time = 250;
+    blink_oper_sloid[1].led_to_dark = bsp_led_s_dark;
+    blink_oper_sloid[1].led_to_light = bsp_led_s_light;
+    
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++interface+++++++++++++++++++++++++++++++++++++++
@@ -56,7 +63,11 @@ void mde_ledBlink_task(void)
     static sdt_bool cfged = sdt_false;
     if(cfged)
     {
-        ledBlink_operation_task(&blink_oper_one);
+        sdt_int8u i;
+        for(i = 0;i < max_solid;i ++)
+        {
+            ledBlink_operation_task(&blink_oper_sloid[i]);
+        } 
     }
     else
     {
@@ -65,13 +76,13 @@ void mde_ledBlink_task(void)
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void mde_ledBlink_change_time(sdt_int8u in_num,sdt_int16u in_period_time,sdt_int16u in_light_time)
+void mde_ledBlink_change_time(sdt_int8u in_solidNum,sdt_int16u in_period_time,sdt_int16u in_light_time)
 {
-    if(0 == in_num)
+    if(in_solidNum < max_solid)
     {
-        blink_oper_one.period_time = in_period_time;
-        blink_oper_one.light_time = in_light_time;
-        pbc_reload_timerClock(&blink_oper_one.timer_period,0);
+        blink_oper_sloid[in_solidNum].period_time = in_period_time;
+        blink_oper_sloid[in_solidNum].light_time = in_light_time;
+        pbc_reload_timerClock(&blink_oper_sloid[in_solidNum].timer_period,0);
     }
     else
     {

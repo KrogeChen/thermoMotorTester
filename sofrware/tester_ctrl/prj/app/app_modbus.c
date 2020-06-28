@@ -22,7 +22,7 @@ void app_modbus_task(void)
         {
             while(reg_length)
             {
-                if(push_mRtu_readReg(0,reg_addr,0x00))
+                if(push_mRtu_readReg(0,reg_addr,0x60))
                 {
                     reg_addr ++;
                     reg_length --;

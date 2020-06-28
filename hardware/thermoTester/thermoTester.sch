@@ -1084,9 +1084,9 @@ Text Label 6650 7850 1    50   ~ 0
 MTX3
 Text Label 6750 7850 1    50   ~ 0
 MRX3
-Text Label 7650 6350 2    50   ~ 0
-MTX1
 Text Label 7650 6250 2    50   ~ 0
+MTX1
+Text Label 7650 6150 2    50   ~ 0
 MRX1
 Text Label 6750 4950 3    50   ~ 0
 MTX4
@@ -3376,7 +3376,7 @@ Text Label 14875 4725 0    50   ~ 0
 lamp_rsv4
 Text Label 14875 4625 0    50   ~ 0
 lamp_rsv5
-NoConn ~ 7650 6150
+NoConn ~ 7650 6350
 $Comp
 L kicad_symbol_general:Q_NPN_BEC Q30
 U 1 1 5F73F8F0

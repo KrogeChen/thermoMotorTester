@@ -10,14 +10,12 @@ void app_general_task(void)
     if(sys_cfged)
     {
         mde_ledBlink_task();
-        
+        app_grating_task();
     }
     else
     {
         sys_cfged = sdt_true;
         mde_systemClock_cfg();
-        
     }
-    
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
