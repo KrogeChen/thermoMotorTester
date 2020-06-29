@@ -117,7 +117,7 @@ void EXTI9_5_IRQHandler(void)
             pulse_abz &= ~pulseBits_a;
         }
         macro_push_queueBasce_data(pulse_queue,pulse_abz);
-        EXTI_ClearITPendingBit(EXTI_Line8); 
+        EXTI_ClearITPendingBit(EXTI_Line9); 
     }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
