@@ -11,7 +11,9 @@
 void bsp_clock_cfg(void)
 {
     sdt_int32u count=0;
-    
+
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);  //disable jtag
+
     __disable_interrupt();
     for(;count<50000;count++)
     { 

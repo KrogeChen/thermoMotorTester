@@ -1,6 +1,6 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#ifndef bsp_digitOutput_H
-#define bsp_digitOutput_H
+#ifndef bsp_digitInput_H
+#define bsp_digitInput_H
 //-----------------------------------------------------------------------------
 #ifndef snail_data_types
     #include ".\snail_data_types.h"
@@ -10,22 +10,15 @@
 //in: 
 //out: 
 //-----------------------------------------------------------------------------
-void bsp_output_cfg(void);
+void bsp_input_port_cfg(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void bsp_output_Y0(sdt_bool in_new_put);
-void bsp_output_Y1(sdt_bool in_new_put);
-void bsp_output_Y2(sdt_bool in_new_put);
-void bsp_output_Y3(sdt_bool in_new_put);
-void bsp_output_Y4(sdt_bool in_new_put);
-void bsp_output_Y5(sdt_bool in_new_put);
-void bsp_output_Y6(sdt_bool in_new_put);
-void bsp_output_Y7(sdt_bool in_new_put);
-void bsp_output_Y8(sdt_bool in_new_put);
-void bsp_output_Y9(sdt_bool in_new_put);
-void bsp_output_Y10(sdt_bool in_new_put);
-void bsp_output_Y11(sdt_bool in_new_put);
-void bsp_output_Y12(sdt_bool in_new_put);
-void bsp_output_Y13(sdt_bool in_new_put);
+sdt_bool bsp_pull_input_X0(void);
+sdt_bool bsp_pull_input_X1(void);
+sdt_bool bsp_pull_input_X2(void);
+sdt_bool bsp_pull_input_X3(void);
+sdt_bool bsp_pull_input_X4(void);
+sdt_bool bsp_pull_input_X5(void);
+sdt_bool bsp_pull_input_X6(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #endif
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

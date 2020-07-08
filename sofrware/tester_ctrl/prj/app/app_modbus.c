@@ -16,15 +16,59 @@ void app_modbus_task(void)
         
         sdt_int16u reg_addr,reg_length;
         mRtu_status_def rd_stauts = mRtuS_none;
+        sdt_int16u reg_detailes;
+        sdt_int32s rd_um;        
+        
 
         rd_stauts = pull_mRtu_register(0,&reg_addr,&reg_length);
         if(mRtuS_read == rd_stauts)
         {
             while(reg_length)
             {
-                 sdt_int32s rd_um;
-                app_pull_site_um(&rd_um);
-                if(push_mRtu_readReg(0,reg_addr,(sdt_int16s)rd_um))
+                switch(reg_addr)
+                {
+                    case regAddr_m_version:
+                    { 
+                        reg_detailes = 0x0001;
+                        break;
+                    }
+                    case regAddr_m_statesW:
+                    {
+                        reg_detailes = 0;
+                        if(app_pull_sme_state())
+                        {
+                            reg_detailes |= bits_mSW_measureIsRun;
+                        }
+                        break;
+                    }
+                    case regAddr_m_ctrlW:
+                    {
+                        reg_detailes = 0x0000;
+                        break;
+                    }
+                    case regAddr_m_msrSecond:
+                    {
+                        reg_detailes = app_pull_stroke_time();
+                        break;
+                    }
+                    case regAddr_m_msrGt_um_0:
+                    {
+                        rd_um = app_pull_stroke_measure();
+                        reg_detailes = rd_um >> 16;
+                        break;
+                    }
+                    case regAddr_m_msrGt_um_1:
+                    {
+                        reg_detailes = rd_um;
+                        break;
+                    }
+                    default:
+                    {
+                        reg_detailes = 0;
+                        break;
+                    }
+                }
+                if(push_mRtu_readReg(0,reg_addr,reg_detailes))
                 {
                     reg_addr ++;
                     reg_length --;
@@ -32,7 +76,7 @@ void app_modbus_task(void)
                 else
                 {
                     break;
-                } 
+                }
             }
             mRtu_answer_event(0);
         }
@@ -43,8 +87,49 @@ void app_modbus_task(void)
                 sdt_int16u rd_wReg_details;
                 if(pull_mRtu_writeReg(0,reg_addr,&rd_wReg_details))
                 {
+                    switch(reg_addr)
+                    {
+                        case regAddr_m_version:
+                        {
+                            break;
+                        }
+                        case regAddr_m_statesW:
+                        {
+                            break;
+                        }
+                        case regAddr_m_ctrlW:
+                        {
+                            if(rd_wReg_details & bits_mCW_start)
+                            {
+                                app_entry_strat_measure();
+                            }
+                            if(rd_wReg_details & bits_mCW_stop)
+                            {
+                                app_entry_stop_measure();
+                            }
+                            break;
+                        }
+                        case regAddr_m_msrSecond:
+                        {
+                            break;
+                        }
+                        case regAddr_m_msrGt_um_0:
+                        {
+                            break;
+                        }
+                        case regAddr_m_msrGt_um_1:
+                        {
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
                     test_reg[test_reg_idx] = rd_wReg_details;
                     test_reg_idx ++;
+
+
                     reg_addr ++;
                     reg_length --;
                 }

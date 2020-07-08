@@ -1947,6 +1947,12 @@
       <name>$PROJ_DIR$\..\app\app_modbus.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\app\app_thermo.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_thermo.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\main.c</name>
     </file>
   </group>
@@ -1956,13 +1962,37 @@
       <name>mde_digitInput</name>
       <group>
         <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_digitInput\depend\bsp_digitInput.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_digitInput\depend\bsp_digitInput.h</name>
+        </file>
       </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_digitInput\mde_digitInput.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_digitInput\mde_digitInput.h</name>
+      </file>
     </group>
     <group>
       <name>mde_digitOutput</name>
       <group>
         <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_digitOutput\depend\bps_digitOutput.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_digitOutput\depend\bsp_digitOutput.c</name>
+        </file>
       </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_digitOutput\mde_digitOutput.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_digitOutput\mde_digitOutput.h</name>
+      </file>
     </group>
     <group>
       <name>mde_grating</name>
