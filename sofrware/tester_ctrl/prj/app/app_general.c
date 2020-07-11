@@ -40,13 +40,13 @@ void app_general_task(void)
         mde_ledBlink_task();
         app_grating_task();
         app_thermoMotor_ts();
-        
-       // test_output();
+        app_sto_run_parameter_task();
     }
     else
     {
         sys_cfged = sdt_true;
         mde_systemClock_cfg();
+        app_read_run_parameter();
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
