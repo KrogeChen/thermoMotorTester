@@ -17,5 +17,7 @@ sdt_int16u app_pull_porduct_select(void);
 sdt_bool app_pull_vp_selected(void);
 void app_push_vp_select(sdt_bool in_select);
 sdt_bool app_pull_emergercy(void);
+void app_push_auto_unload(void);
+sdt_int16u app_pull_second_3_5T(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #endif

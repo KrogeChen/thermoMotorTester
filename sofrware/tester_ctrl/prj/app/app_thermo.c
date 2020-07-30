@@ -12,6 +12,7 @@ typedef enum
 typedef enum
 {
     wmotor_ste_idle  = 0,
+    wmotor_ste_cmd,
     wmotor_ste_uping,
     wmotor_ste_downing,
     wmotor_ste_braking,
@@ -58,6 +59,7 @@ static void weight_motor_update(wmotor_ctrl_def in_ctrl_cmd,sdt_int16u in_time)
 {
     wmotor_para.wmotor_ctrl = in_ctrl_cmd;
     wmotor_para.slide_how_many = in_time;
+    wmotor_para.wmotor_states = wmotor_ste_cmd;
 }
 //-----------------------------------------------------------------------------
 static sdt_bool pull_weight_motorIsIdle(void)
@@ -87,6 +89,10 @@ static void app_weight_motor_do_task(void)
         {
             case wmotor_ste_idle:
             {
+                break;
+            }
+            case wmotor_ste_cmd:
+            {
                 if(pbc_pull_timerIsCompleted(&wmotor_para.timer_brake))
                 {
                     if(wmotor_ctrl_up == wmotor_para.wmotor_ctrl)
@@ -106,6 +112,10 @@ static void app_weight_motor_do_task(void)
                         stop_weight_moto();
                         pbc_reload_timerClock(&wmotor_para.timer_brake,800);
                         wmotor_para.wmotor_states = wmotor_ste_braking;
+                    }
+                    else
+                    {
+                        wmotor_para.wmotor_states = wmotor_ste_idle;
                     }
                     wmotor_para.wmotor_ctrl = wmotor_ctrl_none;
                 }
@@ -236,9 +246,12 @@ static void select_voltage(voltage_level_def in_voltage)
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#define key_start          sdt_bit0
-#define key_stop           sdt_bit1
-#define bms_emergency      2//紧急状态值
+#define key_start          0
+
+
+#define key_stop           1
+//-----------------------------------------------------------------------------
+#define bms_emergency      1//紧急状态值
 //-----------------------------------------------------------------------------
 static sdt_bool emergercy = sdt_false;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -266,7 +279,7 @@ static void app_key_borad_task(void)
     sdt_bool rd_emy;
     rd_emy = mde_pull_input_port(bms_emergency);
     
-    if(rd_emy != emergercy)
+    /*if(rd_emy != emergercy)
     {
         cnt ++;
         if(cnt > 8)
@@ -274,7 +287,7 @@ static void app_key_borad_task(void)
             cnt = 0;
             emergercy = rd_emy;
         }
-    }
+    }*/
     if(emergercy)
     {
         
@@ -304,6 +317,8 @@ typedef enum
     tester_sme_measure,
     tester_sme_abort,
     tester_sme_unload,
+    tester_sme_unloading,
+    tester_sme_complete,
 }tester_stateMachine_def;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #define LOAD_MOTO_RUNT   10  //20s负载搬运电机运行时间
@@ -312,6 +327,7 @@ static tester_stateMachine_def tester_stateMachine;
 static sdt_int32s measure_now;
 static sdt_int32s measure_max;
 static sdt_int16u time_second;
+static sdt_int16u second_for_3500um;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_thermoMotor_ts(void)
 {
@@ -346,6 +362,9 @@ void app_thermoMotor_ts(void)
         }
         case tester_sme_loadWeigth:
         {
+            measure_now = 0;
+            measure_max = 0;
+            time_second = 0;
             app_push_local_gui_sm(mgs_ms_loading);
             weight_motor_update(wmotor_ctrl_down,LOAD_MOTO_RUNT);
             tester_stateMachine = tester_sme_waitLoaded;
@@ -366,6 +385,7 @@ void app_thermoMotor_ts(void)
             measure_max = 0;
             time_second = 0;
             locked_max = 0;
+            second_for_3500um = 0;
             pbc_reload_timerClock(&timer_measue_period,1000);
             pbc_reload_timerClock(&timer_timeout,600);
             app_pull_increment_um();  //measure clean
@@ -382,7 +402,7 @@ void app_thermoMotor_ts(void)
                 measure_now += app_pull_increment_um();
                 if(locked_max < 30)
                 {
-                    if(measure_max < measure_now)
+                    if(measure_max <= measure_now)
                     {
                         measure_max = measure_now;
                         locked_max = 0;
@@ -391,6 +411,13 @@ void app_thermoMotor_ts(void)
                     {
                         locked_max ++;
                     }                    
+                }
+                if(0 == second_for_3500um)
+                {
+                    if(measure_now >= 3500)
+                    {
+                        second_for_3500um = time_second;
+                    }
                 }
             }
             if(pbc_pull_timerIsCompleted(&timer_timeout))
@@ -401,18 +428,35 @@ void app_thermoMotor_ts(void)
         }
         case tester_sme_abort:
         {
-            app_push_local_gui_sm(mgs_ms_unloading);
+
             thermoMotor_heat_disable();
-            weight_motor_update(wmotor_ctrl_up,LOAD_MOTO_RUNT);
-            tester_stateMachine = tester_sme_unload;
+            tester_stateMachine = tester_sme_complete;
             break;
         }
         case tester_sme_unload:
+        {
+            app_push_local_gui_sm(mgs_ms_unloading);
+            weight_motor_update(wmotor_ctrl_up,LOAD_MOTO_RUNT);
+            tester_stateMachine = tester_sme_unloading;
+            break;
+        }
+        case tester_sme_unloading:
         {
             if(pull_weight_motorIsIdle())
             {
                 app_push_local_gui_sm(mgs_ms_complete);
                 tester_stateMachine = tester_sme_idle;
+            }
+            break;
+        }
+        case tester_sme_complete:
+        {
+            app_push_local_gui_sm(mgs_ms_complete);
+            if(pbc_pull_timerIsCompleted(&timer_measue_period))
+            {
+                pbc_reload_timerClock(&timer_measue_period,1000);
+                time_second ++;
+                measure_now += app_pull_increment_um();
             }
             break;
         }
@@ -455,7 +499,10 @@ sdt_bool app_pull_sme_state(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_entry_strat_measure(void)
 {
-    tester_stateMachine = tester_sme_loadWeigth;
+    if(tester_sme_measure != tester_stateMachine)
+    {
+        tester_stateMachine = tester_sme_loadWeigth;
+    }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_entry_stop_measure(void)
@@ -500,5 +547,15 @@ void app_push_vp_select(sdt_bool in_select)
 sdt_bool app_pull_emergercy(void)
 {
     return(emergercy);
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void app_push_auto_unload(void)
+{
+    tester_stateMachine = tester_sme_unload;
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+sdt_int16u app_pull_second_3_5T(void)
+{
+    return(second_for_3500um);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

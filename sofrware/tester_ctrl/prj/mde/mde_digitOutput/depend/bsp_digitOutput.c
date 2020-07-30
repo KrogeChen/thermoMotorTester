@@ -188,11 +188,11 @@ void bsp_output_Y7(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOA,GPIO_Pin_0); 
+        GPIO_SetBits(GPIOA,GPIO_Pin_1); 
     }
     else
     {
-        GPIO_ResetBits(GPIOA,GPIO_Pin_0); 
+        GPIO_ResetBits(GPIOA,GPIO_Pin_1); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -200,11 +200,11 @@ void bsp_output_Y8(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOA,GPIO_Pin_1); 
+        GPIO_SetBits(GPIOA,GPIO_Pin_0);
     }
     else
     {
-        GPIO_ResetBits(GPIOA,GPIO_Pin_1); 
+        GPIO_ResetBits(GPIOA,GPIO_Pin_0);
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

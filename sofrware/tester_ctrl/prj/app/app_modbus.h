@@ -51,6 +51,7 @@ typedef struct
 #define bits_mEBits_selectCMT     sdt_bit4//选择完毕
 #define bits_mEBits_heat          sdt_bit5//加热
 #define bits_mEBits_unheat        sdt_bit6//不加热
+#define bits_mEBits_autoUnload    sdt_bit7//自动卸载
 //-----------------------------------------------------------------------------
 #define regAddr_m_msrSecond        0x0006
 #define regAddr_m_msrGt_um_0       0x0007

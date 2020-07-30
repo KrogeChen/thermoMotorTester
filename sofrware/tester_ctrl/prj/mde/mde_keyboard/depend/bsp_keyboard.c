@@ -27,7 +27,7 @@ sdt_int16u Pull_KeyPinBits(void)
     {
         ReadPinBits |= sdt_bit0;
     }
-    if(mde_pull_input_port(1))
+    if(mde_pull_input_port(2))
     {
         ReadPinBits |= sdt_bit1;
     }

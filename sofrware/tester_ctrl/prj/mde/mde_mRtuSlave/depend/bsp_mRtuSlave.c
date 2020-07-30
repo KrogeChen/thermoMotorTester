@@ -94,7 +94,7 @@ void bsp_uart4_cfg(void)
 //    GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 //-----------------------------------------------------------------------------   
     USART_DeInit(UART4);
-    USART4_INIT.USART_BaudRate=9600;
+    USART4_INIT.USART_BaudRate=57600;
     USART4_INIT.USART_Parity=USART_Parity_No;
     USART4_INIT.USART_WordLength=USART_WordLength_8b;    
 

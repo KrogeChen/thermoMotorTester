@@ -92,7 +92,7 @@ void app_modbus_task(void)
                     case regAddr_m_msrGt_max_0:
                     {
                         rd_um = app_pull_stroke_max();
-                        reg_detailes = rd_um;
+                        reg_detailes = rd_um >> 16;
                         break;
                     }
                     case regAddr_m_msrGt_max_1:
@@ -129,6 +129,11 @@ void app_modbus_task(void)
                     case regAddr_m_select_product:
                     {
                         reg_detailes = app_pull_porduct_select();
+                        break;
+                    }
+                    case regAddr_m_second_3_5T:
+                    {
+                        reg_detailes = app_pull_second_3_5T();
                         break;
                     }
                     default:
@@ -209,6 +214,11 @@ void app_modbus_task(void)
                             if(rd_wReg_details & bits_mEBits_selectCMT)
                             {
                                 app_push_vp_select(sdt_true);
+                                local_gui.m_gui_menu = mgm_measure;
+                            }
+                            if(rd_wReg_details & bits_mEBits_autoUnload)
+                            {
+                                app_push_auto_unload();
                             }
                             break;
                         }
@@ -250,7 +260,8 @@ void app_modbus_task(void)
                         }
                         case regAddr_m_select_voltage:
                         {
-                            app_push_voltage_select(rd_wReg_details);
+                            //app_push_voltage_select(rd_wReg_details);
+                            app_push_voltage_select(4);
                             break;
                         }
                         case regAddr_m_select_product:
