@@ -10,6 +10,7 @@ sdt_int32s app_pull_stroke_measure(void);
 sdt_int32s app_pull_stroke_max(void);
 void app_entry_strat_measure(void);
 void app_entry_stop_measure(void);
+void app_entry_stopAndUnload(void);
 void app_push_voltage_select(sdt_int16u in_voltage);
 sdt_int16u app_pull_voltage_select(void);
 void app_push_product_select(sdt_int16u in_type);

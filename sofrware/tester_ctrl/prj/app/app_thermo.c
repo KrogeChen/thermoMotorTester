@@ -269,7 +269,7 @@ static void app_key_borad_task(void)
         }
         else if(KeyPushDown & Pull_KeyVauleStatus(key_stop,3000,250))
         {
-            app_entry_stop_measure();
+            app_entry_stopAndUnload();
         }
     }
 //-----------------------------------------------------------------------------
@@ -316,6 +316,7 @@ typedef enum
     tester_sme_strHeat,
     tester_sme_measure,
     tester_sme_abort,
+    tester_sme_abortAndUnload,
     tester_sme_unload,
     tester_sme_unloading,
     tester_sme_complete,
@@ -433,6 +434,12 @@ void app_thermoMotor_ts(void)
             tester_stateMachine = tester_sme_complete;
             break;
         }
+        case tester_sme_abortAndUnload:
+        {
+            thermoMotor_heat_disable();
+            tester_stateMachine = tester_sme_unload;
+            break;
+        }
         case tester_sme_unload:
         {
             app_push_local_gui_sm(mgs_ms_unloading);
@@ -508,6 +515,10 @@ void app_entry_strat_measure(void)
 void app_entry_stop_measure(void)
 {
     tester_stateMachine = tester_sme_abort;
+}
+void app_entry_stopAndUnload(void)
+{
+    tester_stateMachine = tester_sme_abortAndUnload;
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_push_voltage_select(sdt_int16u in_voltage)

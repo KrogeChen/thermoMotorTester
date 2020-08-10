@@ -8,9 +8,9 @@ void bsp_input_port_cfg(void)
 {
     GPIO_InitTypeDef GPIO_Init_Data;
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);   //¿ªÆôGPIOA¿ÚÊ±ÖÓ
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);   //¿ªÆôGPIOB¿ÚÊ±ÖÓ
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);   //¿ªÆôGPIOC¿ÚÊ±ÖÓ  
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);   //å¼€å¯GPIOAå£æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);   //å¼€å¯GPIOBå£æ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);   //å¼€å¯GPIOCå£æ—¶é’Ÿ  
 
     GPIO_Init_Data.GPIO_Pin=GPIO_Pin_12;
     GPIO_Init_Data.GPIO_Speed=GPIO_Speed_2MHz;
