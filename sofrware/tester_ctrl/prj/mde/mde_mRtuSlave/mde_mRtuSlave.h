@@ -48,12 +48,18 @@ void mde_mRtu_task(void);
 void set_mRtu_parameter(sdt_int8u in_solidNum,mRtu_parameter_def* in_parameter);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //name:获取modbus register 当前状态
+//获取modbus模块的状态，
+//读状态，指针获取读寄存器首地址和寄存器长度
+//写状态，指针获取写入的寄存器首地址和长度
+//写读状态，指针获取读寄存器首地址和寄存器长度
 //in: in_solidNum实例号,从0开始,*out_reg_addr 地址指针，*out_length 长度指针
 //out: mRtuS_none 无,mRtuS_read 读数据,mRtuS_write 写数据
+//     mRtuS_rwBoth 写读数据，指针获取读的内容
 //-----------------------------------------------------------------------------
 mRtu_status_def pull_mRtu_register(sdt_int8u in_solidNum,sdt_int16u* out_reg_addr,sdt_int16u* out_length);
 //-----------------------------------------------------------------------------
 //name:获取modbus register 写入的内容
+//写读状态时，获取写入的首地址和长度
 //in: in_solidNum实例号,从0开始,*out_reg_addr 地址指针，*out_length 长度指针
 //out: 
 //-----------------------------------------------------------------------------

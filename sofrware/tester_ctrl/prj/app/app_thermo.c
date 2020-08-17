@@ -518,7 +518,10 @@ void app_entry_stop_measure(void)
 }
 void app_entry_stopAndUnload(void)
 {
-    tester_stateMachine = tester_sme_abortAndUnload;
+    if(tester_sme_unloading != tester_stateMachine)
+    {
+        tester_stateMachine = tester_sme_abortAndUnload;
+    }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_push_voltage_select(sdt_int16u in_voltage)

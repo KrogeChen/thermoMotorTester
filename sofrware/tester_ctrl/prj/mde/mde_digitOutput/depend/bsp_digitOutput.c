@@ -3,7 +3,7 @@
 #include ".\snail_data_types.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //PA4 PA5 PA6 PA7 PC4 PC5 PB0
-//PA0 PA1 PC3 PC2 PC1 PC0 PC15
+//PA1 PA0 PC3 PC2 PC1 PC0 PC15
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void bsp_output_cfg(void)
 {
@@ -104,11 +104,11 @@ void bsp_output_Y0(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOA,GPIO_Pin_4); 
+        GPIO_SetBits(GPIOB,GPIO_Pin_0); 
     }
     else
     {
-        GPIO_ResetBits(GPIOA,GPIO_Pin_4); 
+        GPIO_ResetBits(GPIOB,GPIO_Pin_0); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -116,11 +116,11 @@ void bsp_output_Y1(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOA,GPIO_Pin_5); 
+        GPIO_SetBits(GPIOC,GPIO_Pin_5); 
     }
     else
     {
-        GPIO_ResetBits(GPIOA,GPIO_Pin_5); 
+        GPIO_ResetBits(GPIOC,GPIO_Pin_5); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -128,11 +128,11 @@ void bsp_output_Y2(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOA,GPIO_Pin_6); 
+        GPIO_SetBits(GPIOC,GPIO_Pin_4); 
     }
     else
     {
-        GPIO_ResetBits(GPIOA,GPIO_Pin_6); 
+        GPIO_ResetBits(GPIOC,GPIO_Pin_4); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -152,11 +152,11 @@ void bsp_output_Y4(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOC,GPIO_Pin_4); 
+        GPIO_SetBits(GPIOA,GPIO_Pin_6); 
     }
     else
     {
-        GPIO_ResetBits(GPIOC,GPIO_Pin_4); 
+        GPIO_ResetBits(GPIOA,GPIO_Pin_6); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -164,11 +164,11 @@ void bsp_output_Y5(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOC,GPIO_Pin_5); 
+        GPIO_SetBits(GPIOA,GPIO_Pin_5); 
     }
     else
     {
-        GPIO_ResetBits(GPIOC,GPIO_Pin_5); 
+        GPIO_ResetBits(GPIOA,GPIO_Pin_5); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -176,11 +176,11 @@ void bsp_output_Y6(sdt_bool in_new_put)
 {
     if(in_new_put)
     {
-        GPIO_SetBits(GPIOB,GPIO_Pin_0); 
+        GPIO_SetBits(GPIOA,GPIO_Pin_4); 
     }
     else
     {
-        GPIO_ResetBits(GPIOB,GPIO_Pin_0); 
+        GPIO_ResetBits(GPIOA,GPIO_Pin_4); 
     }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

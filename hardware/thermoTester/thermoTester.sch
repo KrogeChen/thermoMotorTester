@@ -1186,12 +1186,12 @@ Wire Wire Line
 $Comp
 L power:GND #PWR0120
 U 1 1 5F1B7C01
-P 2710 2300
-F 0 "#PWR0120" H 2710 2050 50  0001 C CNN
-F 1 "GND" H 2715 2127 50  0000 C CNN
-F 2 "" H 2710 2300 50  0001 C CNN
-F 3 "" H 2710 2300 50  0001 C CNN
-	1    2710 2300
+P 3210 1850
+F 0 "#PWR0120" H 3210 1600 50  0001 C CNN
+F 1 "GND" H 3215 1677 50  0000 C CNN
+F 2 "" H 3210 1850 50  0001 C CNN
+F 3 "" H 3210 1850 50  0001 C CNN
+	1    3210 1850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1845,12 +1845,12 @@ SWDIO
 $Comp
 L power:GND #PWR0151
 U 1 1 5EC8CA6C
-P 2700 3910
-F 0 "#PWR0151" H 2700 3660 50  0001 C CNN
-F 1 "GND" H 2705 3737 50  0000 C CNN
-F 2 "" H 2700 3910 50  0001 C CNN
-F 3 "" H 2700 3910 50  0001 C CNN
-	1    2700 3910
+P 3205 3415
+F 0 "#PWR0151" H 3205 3165 50  0001 C CNN
+F 1 "GND" H 3210 3242 50  0000 C CNN
+F 2 "" H 3205 3415 50  0001 C CNN
+F 3 "" H 3205 3415 50  0001 C CNN
+	1    3205 3415
 	1    0    0    -1  
 $EndComp
 Text Label 12925 2600 0    50   ~ 0
@@ -2886,298 +2886,198 @@ GND
 $Comp
 L kicad_symbol_general:ULN2003 U22
 U 1 1 5F6C0610
-P 2700 3310
-F 0 "U22" H 2885 3860 50  0000 C CNN
-F 1 "ULN2003" H 2575 3860 50  0000 C CNN
-F 2 "kicad_footprint_general:SOIC-16_3.9x9.9mm_P1.27mm" H 2750 2760 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/uln2003a.pdf" H 2800 3110 50  0001 C CNN
-	1    2700 3310
+P 3205 2815
+F 0 "U22" H 3390 3365 50  0000 C CNN
+F 1 "ULN2003" H 3080 3365 50  0000 C CNN
+F 2 "kicad_footprint_general:SOIC-16_3.9x9.9mm_P1.27mm" H 3255 2265 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/uln2003a.pdf" H 3305 2615 50  0001 C CNN
+	1    3205 2815
 	-1   0    0    -1  
 $EndComp
 $Comp
 L kicad_symbol_general:ULN2003 U21
 U 1 1 5F0EA1AC
-P 2710 1700
-F 0 "U21" H 2975 2260 50  0000 C CNN
-F 1 "ULN2003" H 2655 2260 50  0000 C CNN
-F 2 "kicad_footprint_general:SOIC-16_3.9x9.9mm_P1.27mm" H 2760 1150 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/uln2003a.pdf" H 2810 1500 50  0001 C CNN
-	1    2710 1700
+P 3210 1250
+F 0 "U21" H 3475 1810 50  0000 C CNN
+F 1 "ULN2003" H 3155 1810 50  0000 C CNN
+F 2 "kicad_footprint_general:SOIC-16_3.9x9.9mm_P1.27mm" H 3260 700 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/uln2003a.pdf" H 3310 1050 50  0001 C CNN
+	1    3210 1250
 	-1   0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D26
 U 1 1 5F307C97
-P 3330 2100
-F 0 "D26" H 3530 2140 50  0000 R CNN
-F 1 "Red" H 3270 2140 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 2100 50  0001 C CNN
-F 3 "~" V 3330 2100 50  0001 C CNN
-	1    3330 2100
+P 1400 1430
+F 0 "D26" H 1600 1470 50  0000 R CNN
+F 1 "Red" H 1340 1470 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1430 50  0001 C CNN
+F 3 "~" V 1400 1430 50  0001 C CNN
+	1    1400 1430
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3110 2100 3230 2100
 $Comp
 L Device:LED_Small D25
 U 1 1 5F3B03AD
-P 3330 2000
-F 0 "D25" H 3530 2040 50  0000 R CNN
-F 1 "Red" H 3270 2040 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 2000 50  0001 C CNN
-F 3 "~" V 3330 2000 50  0001 C CNN
-	1    3330 2000
+P 1400 1530
+F 0 "D25" H 1600 1570 50  0000 R CNN
+F 1 "Red" H 1340 1570 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1530 50  0001 C CNN
+F 3 "~" V 1400 1530 50  0001 C CNN
+	1    1400 1530
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D24
 U 1 1 5F3B09C1
-P 3330 1900
-F 0 "D24" H 3530 1940 50  0000 R CNN
-F 1 "Red" H 3270 1940 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 1900 50  0001 C CNN
-F 3 "~" V 3330 1900 50  0001 C CNN
-	1    3330 1900
+P 1400 1630
+F 0 "D24" H 1600 1670 50  0000 R CNN
+F 1 "Red" H 1340 1670 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1630 50  0001 C CNN
+F 3 "~" V 1400 1630 50  0001 C CNN
+	1    1400 1630
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D23
 U 1 1 5F3B1027
-P 3330 1800
-F 0 "D23" H 3530 1840 50  0000 R CNN
-F 1 "Red" H 3270 1840 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 1800 50  0001 C CNN
-F 3 "~" V 3330 1800 50  0001 C CNN
-	1    3330 1800
+P 1400 1730
+F 0 "D23" H 1600 1770 50  0000 R CNN
+F 1 "Red" H 1340 1770 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1730 50  0001 C CNN
+F 3 "~" V 1400 1730 50  0001 C CNN
+	1    1400 1730
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D22
 U 1 1 5F3B1596
-P 3330 1700
-F 0 "D22" H 3530 1740 50  0000 R CNN
-F 1 "Red" H 3270 1740 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 1700 50  0001 C CNN
-F 3 "~" V 3330 1700 50  0001 C CNN
-	1    3330 1700
+P 1400 1830
+F 0 "D22" H 1600 1870 50  0000 R CNN
+F 1 "Red" H 1340 1870 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1830 50  0001 C CNN
+F 3 "~" V 1400 1830 50  0001 C CNN
+	1    1400 1830
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D21
 U 1 1 5F3B1B22
-P 3330 1600
-F 0 "D21" H 3530 1640 50  0000 R CNN
-F 1 "Red" H 3270 1640 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 1600 50  0001 C CNN
-F 3 "~" V 3330 1600 50  0001 C CNN
-	1    3330 1600
+P 1400 1930
+F 0 "D21" H 1600 1970 50  0000 R CNN
+F 1 "Red" H 1340 1970 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 1930 50  0001 C CNN
+F 3 "~" V 1400 1930 50  0001 C CNN
+	1    1400 1930
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D20
 U 1 1 5F3B1FD6
-P 3330 1500
-F 0 "D20" H 3530 1540 50  0000 R CNN
-F 1 "Red" H 3270 1540 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3330 1500 50  0001 C CNN
-F 3 "~" V 3330 1500 50  0001 C CNN
-	1    3330 1500
+P 1400 2030
+F 0 "D20" H 1600 2070 50  0000 R CNN
+F 1 "Red" H 1340 2070 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2030 50  0001 C CNN
+F 3 "~" V 1400 2030 50  0001 C CNN
+	1    1400 2030
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3110 2000 3230 2000
+	2810 850  2710 850 
 Wire Wire Line
-	3110 1900 3230 1900
+	2810 1050 2710 1050
 Wire Wire Line
-	3110 1800 3230 1800
+	2810 1150 2710 1150
 Wire Wire Line
-	3110 1700 3230 1700
+	2810 1250 2710 1250
 Wire Wire Line
-	3110 1600 3230 1600
+	2810 1350 2710 1350
 Wire Wire Line
-	3110 1500 3230 1500
+	2810 1450 2710 1450
 Wire Wire Line
-	3430 2100 3710 2100
+	2810 1550 2710 1550
 Wire Wire Line
-	3430 2000 3710 2000
-Wire Wire Line
-	3430 1900 3710 1900
-Wire Wire Line
-	3430 1800 3710 1800
-Wire Wire Line
-	3430 1700 3710 1700
-Wire Wire Line
-	3430 1600 3710 1600
-Wire Wire Line
-	3430 1500 3710 1500
-Wire Wire Line
-	2310 1300 2210 1300
-Wire Wire Line
-	2310 1500 2210 1500
-Wire Wire Line
-	2310 1600 2210 1600
-Wire Wire Line
-	2310 1700 2210 1700
-Wire Wire Line
-	2310 1800 2210 1800
-Wire Wire Line
-	2310 1900 2210 1900
-Wire Wire Line
-	2310 2000 2210 2000
-Wire Wire Line
-	2310 2100 2210 2100
-Text Label 2210 1300 0    50   ~ 0
+	2810 1650 2710 1650
+Text Label 2710 850  0    50   ~ 0
 VIN
-Text Label 2210 1500 0    50   ~ 0
+Text Label 2710 1050 0    50   ~ 0
 Y0
-Text Label 2210 1600 0    50   ~ 0
+Text Label 2710 1150 0    50   ~ 0
 Y1
-Text Label 2210 1700 0    50   ~ 0
+Text Label 2710 1250 0    50   ~ 0
 Y2
-Text Label 2210 1800 0    50   ~ 0
+Text Label 2710 1350 0    50   ~ 0
 Y3
-Text Label 2210 1900 0    50   ~ 0
+Text Label 2710 1450 0    50   ~ 0
 Y4
-Text Label 2210 2000 0    50   ~ 0
+Text Label 2710 1550 0    50   ~ 0
 Y5
-Text Label 2210 2100 0    50   ~ 0
+Text Label 2710 1650 0    50   ~ 0
 Y6
 $Comp
 L Device:LED_Small D204
 U 1 1 6026EAD1
-P 3320 3710
-F 0 "D204" H 3565 3750 50  0000 R CNN
-F 1 "Red" H 3260 3750 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3710 50  0001 C CNN
-F 3 "~" V 3320 3710 50  0001 C CNN
-	1    3320 3710
+P 1400 2400
+F 0 "D204" H 1645 2440 50  0000 R CNN
+F 1 "Red" H 1340 2440 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2400 50  0001 C CNN
+F 3 "~" V 1400 2400 50  0001 C CNN
+	1    1400 2400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3100 3710 3220 3710
 $Comp
 L Device:LED_Small D203
 U 1 1 6026EAD8
-P 3320 3610
-F 0 "D203" H 3565 3650 50  0000 R CNN
-F 1 "Red" H 3260 3650 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3610 50  0001 C CNN
-F 3 "~" V 3320 3610 50  0001 C CNN
-	1    3320 3610
+P 1400 2500
+F 0 "D203" H 1645 2540 50  0000 R CNN
+F 1 "Red" H 1340 2540 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2500 50  0001 C CNN
+F 3 "~" V 1400 2500 50  0001 C CNN
+	1    1400 2500
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:LED_Small D202
 U 1 1 6026EADE
-P 3320 3510
-F 0 "D202" H 3565 3550 50  0000 R CNN
-F 1 "Red" H 3260 3550 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3510 50  0001 C CNN
-F 3 "~" V 3320 3510 50  0001 C CNN
-	1    3320 3510
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:LED_Small D201
-U 1 1 6026EAE4
-P 3320 3410
-F 0 "D201" H 3565 3450 50  0000 R CNN
-F 1 "Red" H 3260 3450 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3410 50  0001 C CNN
-F 3 "~" V 3320 3410 50  0001 C CNN
-	1    3320 3410
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:LED_Small D29
-U 1 1 6026EAEA
-P 3320 3310
-F 0 "D29" H 3520 3350 50  0000 R CNN
-F 1 "Red" H 3260 3350 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3310 50  0001 C CNN
-F 3 "~" V 3320 3310 50  0001 C CNN
-	1    3320 3310
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:LED_Small D28
-U 1 1 6026EAF0
-P 3320 3210
-F 0 "D28" H 3520 3250 50  0000 R CNN
-F 1 "Red" H 3260 3250 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3210 50  0001 C CNN
-F 3 "~" V 3320 3210 50  0001 C CNN
-	1    3320 3210
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:LED_Small D27
-U 1 1 6026EAF6
-P 3320 3110
-F 0 "D27" H 3520 3150 50  0000 R CNN
-F 1 "Red" H 3260 3150 50  0000 R CNN
-F 2 "Diode_SMD:D_0603_1608Metric" V 3320 3110 50  0001 C CNN
-F 3 "~" V 3320 3110 50  0001 C CNN
-	1    3320 3110
+P 1400 2600
+F 0 "D202" H 1645 2640 50  0000 R CNN
+F 1 "Red" H 1340 2640 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2600 50  0001 C CNN
+F 3 "~" V 1400 2600 50  0001 C CNN
+	1    1400 2600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3100 3610 3220 3610
+	2805 2415 2645 2415
 Wire Wire Line
-	3100 3510 3220 3510
+	2805 2615 2645 2615
 Wire Wire Line
-	3100 3410 3220 3410
+	2805 2715 2645 2715
 Wire Wire Line
-	3100 3310 3220 3310
+	2805 2815 2645 2815
 Wire Wire Line
-	3100 3210 3220 3210
+	2805 2915 2645 2915
 Wire Wire Line
-	3100 3110 3220 3110
+	2805 3015 2645 3015
 Wire Wire Line
-	3420 3710 3820 3710
+	2805 3115 2645 3115
 Wire Wire Line
-	3420 3610 3820 3610
-Wire Wire Line
-	3420 3510 3820 3510
-Wire Wire Line
-	3420 3410 3820 3410
-Wire Wire Line
-	3420 3310 3815 3310
-Wire Wire Line
-	3420 3210 3815 3210
-Wire Wire Line
-	3420 3110 3815 3110
-Wire Wire Line
-	2300 2910 2140 2910
-Wire Wire Line
-	2300 3110 2140 3110
-Wire Wire Line
-	2300 3210 2140 3210
-Wire Wire Line
-	2300 3310 2140 3310
-Wire Wire Line
-	2300 3410 2140 3410
-Wire Wire Line
-	2300 3510 2140 3510
-Wire Wire Line
-	2300 3610 2140 3610
-Wire Wire Line
-	2300 3710 2140 3710
-Text Label 2140 2910 0    50   ~ 0
+	2805 3215 2645 3215
+Text Label 2645 2415 0    50   ~ 0
 VIN
-Text Label 2140 3110 0    50   ~ 0
+Text Label 2645 2615 0    50   ~ 0
 Y7
-Text Label 2140 3210 0    50   ~ 0
+Text Label 2645 2715 0    50   ~ 0
 Y8
-Text Label 2140 3310 0    50   ~ 0
+Text Label 2645 2815 0    50   ~ 0
 Y9
-Text Label 2140 3410 0    50   ~ 0
+Text Label 2645 2915 0    50   ~ 0
 Y10
-Text Label 2140 3510 0    50   ~ 0
+Text Label 2645 3015 0    50   ~ 0
 Y11
-Text Label 2140 3610 0    50   ~ 0
+Text Label 2645 3115 0    50   ~ 0
 Y12
-Text Label 2140 3710 0    50   ~ 0
+Text Label 2645 3215 0    50   ~ 0
 Y13
 $Comp
 L power:GND #PWR0111
@@ -4094,56 +3994,56 @@ F 3 "" H 2650 6000 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Connection ~ 2650 6000
-Text Label 3710 1500 2    50   ~ 0
+Text Label 4010 1050 2    50   ~ 0
 M_Y0
-Text Label 3710 1600 2    50   ~ 0
+Text Label 4010 1150 2    50   ~ 0
 M_Y1
-Text Label 3710 1700 2    50   ~ 0
+Text Label 4010 1250 2    50   ~ 0
 M_Y2
-Text Label 3710 1800 2    50   ~ 0
+Text Label 4010 1350 2    50   ~ 0
 M_Y3
-Text Label 3710 1900 2    50   ~ 0
+Text Label 4010 1450 2    50   ~ 0
 M_Y4
-Text Label 3710 2000 2    50   ~ 0
+Text Label 4010 1550 2    50   ~ 0
 M_Y5
-Text Label 3710 2100 2    50   ~ 0
+Text Label 4010 1650 2    50   ~ 0
 M_Y6
-Text Label 3815 3110 2    50   ~ 0
+Text Label 4120 2615 2    50   ~ 0
 M_Y7
-Text Label 3815 3210 2    50   ~ 0
+Text Label 4120 2715 2    50   ~ 0
 M_Y8
-Text Label 3815 3310 2    50   ~ 0
+Text Label 4120 2815 2    50   ~ 0
 M_Y9
-Text Label 3820 3410 2    50   ~ 0
+Text Label 4125 2915 2    50   ~ 0
 M_Y10
-Text Label 3820 3510 2    50   ~ 0
+Text Label 4125 3015 2    50   ~ 0
 M_Y11
-Text Label 3820 3610 2    50   ~ 0
+Text Label 4125 3115 2    50   ~ 0
 M_Y12
-Text Label 3820 3710 2    50   ~ 0
+Text Label 4125 3215 2    50   ~ 0
 M_Y13
 Wire Wire Line
-	990  1830 1175 1830
+	990  1830 1300 1830
 Wire Wire Line
-	990  1930 1175 1930
+	990  1930 1300 1930
 Wire Wire Line
-	990  2030 1175 2030
+	990  2030 1300 2030
 Wire Wire Line
-	995  2915 1175 2915
+	995  2900 1300 2900
 Wire Wire Line
-	995  3015 1170 3015
+	995  3000 1300 3000
 Wire Wire Line
-	990  1430 1165 1430
+	990  1430 1300 1430
 Wire Wire Line
-	995  2415 1170 2415
+	995  2400 1300 2400
 Wire Wire Line
-	995  2515 1170 2515
+	995  2500 1300 2500
 Wire Wire Line
-	995  2615 1170 2615
+	995  2600 1300 2600
 Wire Wire Line
-	995  2715 1170 2715
+	995  2700 1300 2700
 Wire Wire Line
-	995  2815 1170 2815
+	995  2800 1300 2800
 Text Label 1175 2030 2    50   ~ 0
 Y0
 Text Label 1175 1930 2    50   ~ 0
@@ -4152,19 +4052,19 @@ Text Label 1175 1830 2    50   ~ 0
 Y2
 Text Label 1165 1430 2    50   ~ 0
 Y6
-Text Label 1170 3015 2    50   ~ 0
+Text Label 1170 3000 2    50   ~ 0
 Y7
-Text Label 1175 2915 2    50   ~ 0
+Text Label 1175 2900 2    50   ~ 0
 Y8
-Text Label 1170 2815 2    50   ~ 0
+Text Label 1170 2800 2    50   ~ 0
 Y9
-Text Label 1170 2715 2    50   ~ 0
+Text Label 1170 2700 2    50   ~ 0
 Y10
-Text Label 1170 2615 2    50   ~ 0
+Text Label 1170 2600 2    50   ~ 0
 Y11
-Text Label 1170 2515 2    50   ~ 0
+Text Label 1170 2500 2    50   ~ 0
 Y12
-Text Label 1170 2415 2    50   ~ 0
+Text Label 1170 2400 2    50   ~ 0
 Y13
 Wire Wire Line
 	4665 8320 5070 8320
@@ -4340,20 +4240,20 @@ Y4
 Text Label 1180 1730 2    50   ~ 0
 Y3
 Wire Wire Line
-	990  1730 1180 1730
+	990  1730 1300 1730
 Wire Wire Line
-	990  1630 1180 1630
+	990  1630 1300 1630
 Wire Wire Line
-	990  1530 1180 1530
+	990  1530 1300 1530
 $Comp
 L kicad_symbol_general:Conn_01x07 J22
 U 1 1 5F953821
-P 795 2715
-F 0 "J22" H 713 3232 50  0000 C CNN
-F 1 "YOUT" H 713 3141 50  0000 C CNN
-F 2 "kicad_footprint_general:PhoenixContact_MCV_1,5_7-G-3.81_1x07_P3.81mm_Vertical" H 795 2715 50  0001 C CNN
-F 3 "~" H 795 2715 50  0001 C CNN
-	1    795  2715
+P 795 2700
+F 0 "J22" H 713 3217 50  0000 C CNN
+F 1 "YOUT" H 713 3126 50  0000 C CNN
+F 2 "kicad_footprint_general:PhoenixContact_MCV_1,5_7-G-3.81_1x07_P3.81mm_Vertical" H 795 2700 50  0001 C CNN
+F 3 "~" H 795 2700 50  0001 C CNN
+	1    795  2700
 	-1   0    0    -1  
 $EndComp
 $Comp
@@ -5539,4 +5439,334 @@ F 3 "" H 3135 11035 50  0001 C CNN
 	1    3135 11035
 	1    0    0    -1  
 $EndComp
+$Comp
+L Device:LED_Small D201
+U 1 1 6026EAE4
+P 1400 2700
+F 0 "D201" H 1645 2740 50  0000 R CNN
+F 1 "Red" H 1340 2740 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2700 50  0001 C CNN
+F 3 "~" V 1400 2700 50  0001 C CNN
+	1    1400 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_Small D29
+U 1 1 6026EAEA
+P 1400 2800
+F 0 "D29" H 1600 2840 50  0000 R CNN
+F 1 "Red" H 1340 2840 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2800 50  0001 C CNN
+F 3 "~" V 1400 2800 50  0001 C CNN
+	1    1400 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_Small D28
+U 1 1 6026EAF0
+P 1400 2900
+F 0 "D28" H 1600 2940 50  0000 R CNN
+F 1 "Red" H 1340 2940 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 2900 50  0001 C CNN
+F 3 "~" V 1400 2900 50  0001 C CNN
+	1    1400 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_Small D27
+U 1 1 6026EAF6
+P 1400 3000
+F 0 "D27" H 1600 3040 50  0000 R CNN
+F 1 "Red" H 1340 3040 50  0000 R CNN
+F 2 "Diode_SMD:D_0603_1608Metric" V 1400 3000 50  0001 C CNN
+F 3 "~" V 1400 3000 50  0001 C CNN
+	1    1400 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3610 1650 4010 1650
+Wire Wire Line
+	3610 1550 4010 1550
+Wire Wire Line
+	3610 1450 4010 1450
+Wire Wire Line
+	3610 1350 4010 1350
+Wire Wire Line
+	3610 1250 4010 1250
+Wire Wire Line
+	3610 1150 4010 1150
+Wire Wire Line
+	3610 1050 4010 1050
+Wire Wire Line
+	3605 3215 4125 3215
+Wire Wire Line
+	3605 3115 4125 3115
+Wire Wire Line
+	3605 3015 4125 3015
+Wire Wire Line
+	3605 2915 4125 2915
+Wire Wire Line
+	3605 2815 4120 2815
+Wire Wire Line
+	3605 2715 4120 2715
+Wire Wire Line
+	3605 2615 4120 2615
+$Comp
+L Device:R_US R210
+U 1 1 600A86E1
+P 1900 2030
+F 0 "R210" V 1930 1755 50  0000 L CNN
+F 1 "33k" V 1930 2125 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2020 50  0001 C CNN
+F 3 "~" H 1900 2030 50  0001 C CNN
+	1    1900 2030
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1500 2030 1750 2030
+Wire Wire Line
+	2050 2030 2250 2030
+Wire Wire Line
+	2250 2030 2250 1930
+Wire Wire Line
+	2250 1250 2100 1250
+Text Label 2100 1250 0    50   ~ 0
+VIN
+$Comp
+L Device:R_US R211
+U 1 1 605AEAC2
+P 1900 1930
+F 0 "R211" V 1930 1655 50  0000 L CNN
+F 1 "33k" V 1930 2025 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1920 50  0001 C CNN
+F 3 "~" H 1900 1930 50  0001 C CNN
+	1    1900 1930
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R212
+U 1 1 605B5D99
+P 1900 1830
+F 0 "R212" V 1930 1555 50  0000 L CNN
+F 1 "33k" V 1930 1925 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1820 50  0001 C CNN
+F 3 "~" H 1900 1830 50  0001 C CNN
+	1    1900 1830
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R213
+U 1 1 605B69AD
+P 1900 1730
+F 0 "R213" V 1930 1455 50  0000 L CNN
+F 1 "33k" V 1930 1825 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1720 50  0001 C CNN
+F 3 "~" H 1900 1730 50  0001 C CNN
+	1    1900 1730
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R214
+U 1 1 605B6CC4
+P 1900 1630
+F 0 "R214" V 1930 1355 50  0000 L CNN
+F 1 "33k" V 1930 1725 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1620 50  0001 C CNN
+F 3 "~" H 1900 1630 50  0001 C CNN
+	1    1900 1630
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1500 1930 1750 1930
+Wire Wire Line
+	1500 1830 1750 1830
+Wire Wire Line
+	1500 1730 1750 1730
+Wire Wire Line
+	1500 1630 1750 1630
+Wire Wire Line
+	1500 1530 1750 1530
+Wire Wire Line
+	1500 1430 1750 1430
+$Comp
+L Device:R_US R215
+U 1 1 6098A939
+P 1900 1530
+F 0 "R215" V 1930 1255 50  0000 L CNN
+F 1 "33k" V 1930 1625 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1520 50  0001 C CNN
+F 3 "~" H 1900 1530 50  0001 C CNN
+	1    1900 1530
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R216
+U 1 1 6098B176
+P 1900 1430
+F 0 "R216" V 1930 1155 50  0000 L CNN
+F 1 "33k" V 1930 1525 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 1420 50  0001 C CNN
+F 3 "~" H 1900 1430 50  0001 C CNN
+	1    1900 1430
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2050 1930 2250 1930
+Connection ~ 2250 1930
+Wire Wire Line
+	2250 1930 2250 1830
+Wire Wire Line
+	2050 1830 2250 1830
+Connection ~ 2250 1830
+Wire Wire Line
+	2250 1830 2250 1730
+Wire Wire Line
+	2050 1730 2250 1730
+Connection ~ 2250 1730
+Wire Wire Line
+	2250 1730 2250 1630
+Wire Wire Line
+	2050 1630 2250 1630
+Connection ~ 2250 1630
+Wire Wire Line
+	2250 1630 2250 1530
+Wire Wire Line
+	2050 1530 2250 1530
+Connection ~ 2250 1530
+Wire Wire Line
+	2250 1530 2250 1430
+Wire Wire Line
+	2050 1430 2250 1430
+Connection ~ 2250 1430
+Wire Wire Line
+	2250 1430 2250 1250
+$Comp
+L Device:R_US R217
+U 1 1 60D85169
+P 1900 3000
+F 0 "R217" V 1930 2725 50  0000 L CNN
+F 1 "33k" V 1930 3095 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2990 50  0001 C CNN
+F 3 "~" H 1900 3000 50  0001 C CNN
+	1    1900 3000
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1500 3000 1750 3000
+Wire Wire Line
+	2050 3000 2250 3000
+Wire Wire Line
+	2250 3000 2250 2900
+Wire Wire Line
+	2250 2220 2100 2220
+Text Label 2100 2220 0    50   ~ 0
+VIN
+$Comp
+L Device:R_US R218
+U 1 1 60D85174
+P 1900 2900
+F 0 "R218" V 1930 2625 50  0000 L CNN
+F 1 "33k" V 1930 2995 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2890 50  0001 C CNN
+F 3 "~" H 1900 2900 50  0001 C CNN
+	1    1900 2900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R219
+U 1 1 60D8517A
+P 1900 2800
+F 0 "R219" V 1930 2525 50  0000 L CNN
+F 1 "33k" V 1930 2895 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2790 50  0001 C CNN
+F 3 "~" H 1900 2800 50  0001 C CNN
+	1    1900 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R220
+U 1 1 60D85180
+P 1900 2700
+F 0 "R220" V 1930 2425 50  0000 L CNN
+F 1 "33k" V 1930 2795 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2690 50  0001 C CNN
+F 3 "~" H 1900 2700 50  0001 C CNN
+	1    1900 2700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R221
+U 1 1 60D85186
+P 1900 2600
+F 0 "R221" V 1930 2325 50  0000 L CNN
+F 1 "33k" V 1930 2695 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2590 50  0001 C CNN
+F 3 "~" H 1900 2600 50  0001 C CNN
+	1    1900 2600
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1500 2900 1750 2900
+Wire Wire Line
+	1500 2800 1750 2800
+Wire Wire Line
+	1500 2700 1750 2700
+Wire Wire Line
+	1500 2600 1750 2600
+Wire Wire Line
+	1500 2500 1750 2500
+Wire Wire Line
+	1500 2400 1750 2400
+$Comp
+L Device:R_US R222
+U 1 1 60D85192
+P 1900 2500
+F 0 "R222" V 1930 2225 50  0000 L CNN
+F 1 "33k" V 1930 2595 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2490 50  0001 C CNN
+F 3 "~" H 1900 2500 50  0001 C CNN
+	1    1900 2500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_US R223
+U 1 1 60D85198
+P 1900 2400
+F 0 "R223" V 1930 2125 50  0000 L CNN
+F 1 "33k" V 1930 2495 50  0000 L CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" V 1940 2390 50  0001 C CNN
+F 3 "~" H 1900 2400 50  0001 C CNN
+	1    1900 2400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2050 2900 2250 2900
+Connection ~ 2250 2900
+Wire Wire Line
+	2250 2900 2250 2800
+Wire Wire Line
+	2050 2800 2250 2800
+Connection ~ 2250 2800
+Wire Wire Line
+	2250 2800 2250 2700
+Wire Wire Line
+	2050 2700 2250 2700
+Connection ~ 2250 2700
+Wire Wire Line
+	2250 2700 2250 2600
+Wire Wire Line
+	2050 2600 2250 2600
+Connection ~ 2250 2600
+Wire Wire Line
+	2250 2600 2250 2500
+Wire Wire Line
+	2050 2500 2250 2500
+Connection ~ 2250 2500
+Wire Wire Line
+	2250 2500 2250 2400
+Wire Wire Line
+	2050 2400 2250 2400
+Connection ~ 2250 2400
+Wire Wire Line
+	2250 2400 2250 2220
 $EndSCHEMATC

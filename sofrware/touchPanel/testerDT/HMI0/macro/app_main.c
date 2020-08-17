@@ -226,8 +226,8 @@ int MacroEntry()
 //-----------------------------------------------------------------------
     unsigned short voltage_select_win;
 	ReadLocal("LW",100,1,&voltage_select_win,0);
-	unsigned short product_select_win
-	ReadLocal("LW",101,1,&voltage_select_win,0);
+	unsigned short product_select_win;
+	ReadLocal("LW",101,1,&product_select_win,0);
 	
 //-----------------------------------------------------------------------
 //全局变量数据
