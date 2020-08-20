@@ -1929,6 +1929,12 @@
       <name>$PROJ_DIR$\..\app\app_cfg.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\app\app_electricmeter.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_electricmeter.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\app_general.c</name>
     </file>
     <file>
@@ -2052,6 +2058,24 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\mde\mde_ledBlink\mde_ledBlink.h</name>
+      </file>
+    </group>
+    <group>
+      <name>mde_mRtuMaster</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuMaster\depend\bsp_mRtuMaster.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mRtuMaster\depend\bsp_mRtuMaster.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_mRtuMaster\mde_mRtuMaster.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_mRtuMaster\mde_mRtuMaster.h</name>
       </file>
     </group>
     <group>

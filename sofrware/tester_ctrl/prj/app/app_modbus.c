@@ -260,8 +260,7 @@ void app_modbus_task(void)
                         }
                         case regAddr_m_select_voltage:
                         {
-                            //app_push_voltage_select(rd_wReg_details);
-                            app_push_voltage_select(4);
+                            app_push_voltage_select(rd_wReg_details);
                             break;
                         }
                         case regAddr_m_select_product:

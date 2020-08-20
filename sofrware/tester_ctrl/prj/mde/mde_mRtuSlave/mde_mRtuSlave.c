@@ -34,7 +34,7 @@ typedef struct
     sdt_int8u  receive_buff[256];
     sdt_int8u  rev_index;
     sdt_int8u  transmit_buff[256];
-    sdt_int16u transmit_regAddrStr;
+    //sdt_int16u transmit_regAddrStr;
     sdt_int8u  transmit_length;
     sdt_int8u  transmit_index;
     timerClock_def timer_revTimeOut;
@@ -200,7 +200,7 @@ static void modbus_operation_task(modbus_oper_def* mix_oper)
         }
         case mRunS_receive_end:
         {
-            if(pbc_pull_timerIsCompleted(&mix_oper->timer_revTimeOut))
+            if(pbc_pull_timerIsCompleted(&mix_oper->timer_revTimeOut))//1500ms的应答处理时间，超时恢复到接收状态
             {
                 mix_oper->moo_runStutus = mRunS_receive_wait;
             }

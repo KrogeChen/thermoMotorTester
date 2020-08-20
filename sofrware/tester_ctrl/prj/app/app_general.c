@@ -41,6 +41,7 @@ void app_general_task(void)
         app_grating_task();
         app_thermoMotor_ts();
         app_sto_run_parameter_task();
+        app_electrimeter_task();
     }
     else
     {
