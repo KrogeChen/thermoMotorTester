@@ -2494,6 +2494,24 @@
       </file>
     </group>
     <group>
+      <name>mde_mutilpt100</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mutlipt100\depend\bsp_mutilpt100.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_mutlipt100\depend\bsp_mutilpt100.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_mutlipt100\mde_mutilpt100.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_mutlipt100\mde_mutilpt100.h</name>
+      </file>
+    </group>
+    <group>
       <name>mde_stroage</name>
       <group>
         <name>depend</name>
