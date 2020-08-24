@@ -19,5 +19,6 @@
 #include "..\.\mde\mde_digitOutput\mde_digitOutput.h"
 #include "..\.\mde\mde_keyboard\mde_keyboard.h"
 #include "..\.\mde\mde_storage32bits\mde_storage32bits.h"
+#include "..\.\mde\mde_mutlipt100\mde_mutilpt100.h"
 
 #endif //app_cfg_H

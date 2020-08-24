@@ -42,6 +42,7 @@ void app_general_task(void)
         app_thermoMotor_ts();
         app_sto_run_parameter_task();
         app_electrimeter_task();
+        mde_mutil_pt100_task();
     }
     else
     {

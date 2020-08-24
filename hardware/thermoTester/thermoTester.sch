@@ -2763,7 +2763,6 @@ Connection ~ 14100 8815
 NoConn ~ 3240 6930
 Text Label 6950 5740 1    50   ~ 0
 TRS
-NoConn ~ 5070 8520
 $Comp
 L Device:R_US R24
 U 1 1 5EE21AA3
@@ -5769,4 +5768,11 @@ Wire Wire Line
 Connection ~ 2250 2400
 Wire Wire Line
 	2250 2400 2250 2220
+Wire Wire Line
+	5070 8520 4990 8520
+Wire Wire Line
+	4990 8520 4990 9020
+Wire Wire Line
+	4990 9020 5620 9020
+Connection ~ 5620 9020
 $EndSCHEMATC

@@ -18,7 +18,7 @@ typedef signed   long        sdt_int32s;                   /* Signed   32 bit qu
 //typedef unsigned long long   sdt_int64u;                   /* Unsigned 64 bit quantity      */
 //typedef signed   long long   sdt_int64s;                   /* Signed   64 bit quantity      */
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#define sdt_true    0xFF                                /*布尔运算真值*/
+#define sdt_true    0x01                                /*布尔运算真值*/
 #define sdt_false   0x00                                /*布尔运算假值*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //位运算
