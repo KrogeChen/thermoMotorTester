@@ -1953,6 +1953,12 @@
       <name>$PROJ_DIR$\..\app\app_modbus.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\app\app_pt100.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_pt100.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\app_storage.c</name>
     </file>
     <file>

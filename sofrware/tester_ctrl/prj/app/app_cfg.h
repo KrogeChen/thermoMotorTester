@@ -8,6 +8,7 @@
 #include ".\app_thermo.h"
 #include ".\app_storage.h"
 #include ".\app_electricmeter.h"
+#include ".\app_pt100.h"
 
 #include "..\.\pbc\pbc_sysTick\pbc_sysTick.h"
 #include "..\.\mde\mde_sysClock\mde_system_clock.h"
