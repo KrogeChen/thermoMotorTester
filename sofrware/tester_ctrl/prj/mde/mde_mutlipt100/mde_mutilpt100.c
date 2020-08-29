@@ -6,7 +6,7 @@
 #include ".\mde_mutilpt100.h"
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //pt100阻值表，1mr,-50-300 度
-static const sdt_int32u pt100_res[] =
+static const sdt_int32s pt100_res_table[] =
 {
     80306, 80703, 81100, 81497, 81894, 82290, 82686, 83083, 83479, 83875,   //-50  -41
     84271, 84666, 85062, 85457, 85852, 86248, 86643, 87037, 87432, 87827,   //-40  -31
@@ -159,6 +159,60 @@ static sdt_int32u ads1220_read_adc_value(sim_spi_oop_def* pMix_oop)
     return(adc_value);
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//in_refv :标准电阻
+//in_pt100v_ol: pt100+1根线阻
+//in_pt100v_tl: pt100+2根线阻
+static sdt_int32s calc_temperature_pt100(sdt_int32u in_refv,sdt_int32u in_pt100v_ol,sdt_int32u in_pt100v_tl)
+{
+    sdt_int32s temperature;
+    sdt_int32u pt100_resv;
+    sdt_int32u pt100_res;
+
+    pt100_resv = in_pt100v_ol + in_pt100v_ol - in_pt100v_tl;
+    pt100_res =  (pt100_resv * 100000) / in_refv;
+
+    sdt_int32s Table_Index;
+    sdt_int32s Hihg_Res;
+    sdt_int32s Low_Res;
+    sdt_int32s This_Temperature;
+    sdt_int32s Decimals;
+    sdt_int32s Remainder;
+    
+    if(pt100_res > pt100_res_table[349])
+    {
+        pt100_res = pt100_res_table[349];
+    }
+    Table_Index = 0;
+    while(pt100_res > pt100_res_table[Table_Index])
+    {
+        Table_Index++;
+    }
+    if(0 == Table_Index)
+    {
+        return(-5000);
+    }
+    else 
+    {
+        Low_Res = pt100_res_table[Table_Index-1];
+        Hihg_Res = pt100_res_table[Table_Index];
+    }
+    Decimals = (Hihg_Res - pt100_res)*100;
+    Remainder = Decimals%(Hihg_Res-Low_Res);
+    Decimals = Decimals/(Hihg_Res-Low_Res);
+    if(Remainder>((Hihg_Res-Low_Res)/2))
+    {
+        Decimals += 1;
+    }
+    
+    This_Temperature = Table_Index*100 -50;
+    
+    This_Temperature = This_Temperature - (sdt_int32s)Decimals;
+    return(This_Temperature);
+
+    
+    return(temperature);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //状态机
 typedef enum
 {
@@ -188,7 +242,7 @@ typedef struct
     sdt_bool(*mpp_pull_DRDY)(void);
     void(*mpp_select_way)(sdt_int8u in_new_way);
 }mutil_pt100_oop_def;
-#define  TIME_CHANGE_MS   10
+#define  TIME_CHANGE_MS   0
 //--------------------------------------------------------------------------------------------------------------------------
 //多通道PT100任务
 static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
@@ -297,7 +351,8 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
                 pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
                 pMix_oop->try_count ++;
                 if(pMix_oop->try_count > 4)
-                {
+                {//采样完毕，计算温度值,
+                    
                     pMix_oop->mutil_pt100_state = mupts_ch1_sll0;
                 }
                 else
