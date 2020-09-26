@@ -65,6 +65,10 @@ typedef struct
 #define regAddr_m_select_voltage   0x000F//电压等级
 #define regAddr_m_select_product   0x0010//产品类型
 #define regAddr_m_second_3_5T      0x0011//3.5行程时间
+#define regAddr_m_pt100_tway_0     0x0012//温度值0通道  
+#define regAddr_m_pt100_tway_1     0x0013
+#define regAddr_m_pt100_tway_2     0x0014
+#define regAddr_m_pt100_tway_3     0x0015
 
 //-----------------------------------------------------------------------------
 void app_modbus_task(void);

@@ -1,9 +1,9 @@
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //基于ADS1220+4051 的PT100测量模块
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#include "..\..\pbc\pbc_sysTick\pbc_sysTick.h"
 #include ".\depend\bsp_mutilpt100.h"
 #include ".\mde_mutilpt100.h"
+#include "..\..\pbc\pbc_sysTick\pbc_sysTick.h"
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //pt100阻值表，1mr,-50-300 度
 static const sdt_int32s pt100_res_table[] =
@@ -164,12 +164,11 @@ static sdt_int32u ads1220_read_adc_value(sim_spi_oop_def* pMix_oop)
 //in_pt100v_tl: pt100+2根线阻
 static sdt_int32s calc_temperature_pt100(sdt_int32u in_refv,sdt_int32u in_pt100v_ol,sdt_int32u in_pt100v_tl)
 {
-    sdt_int32s temperature;
     sdt_int32u pt100_resv;
     sdt_int32u pt100_res;
 
     pt100_resv = in_pt100v_ol + in_pt100v_ol - in_pt100v_tl;
-    pt100_res =  (pt100_resv * 100000) / in_refv;
+    pt100_res =  ((sdt_int64u)pt100_resv * 100000) / in_refv;
 
     sdt_int32s Table_Index;
     sdt_int32s Hihg_Res;
@@ -204,13 +203,10 @@ static sdt_int32s calc_temperature_pt100(sdt_int32u in_refv,sdt_int32u in_pt100v
         Decimals += 1;
     }
     
-    This_Temperature = Table_Index*100 -50;
+    This_Temperature = (Table_Index-50)*100;
     
     This_Temperature = This_Temperature - (sdt_int32s)Decimals;
     return(This_Temperature);
-
-    
-    return(temperature);
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //状态机
@@ -226,17 +222,39 @@ typedef enum
     mupts_ch0_sll1,
     mupts_ch0_sll1_str,
     mupts_ch0_sll1_watieCov,
-    mupts_ch1_sll0,
     
+    mupts_ch1_sll0,
+    mupts_ch1_sll0_str,
+    mupts_ch1_sll0_watieCov,
+    mupts_ch1_sll1,
+    mupts_ch1_sll1_str,
+    mupts_ch1_sll1_watieCov,
 
+    mupts_ch2_sll0,
+    mupts_ch2_sll0_str,
+    mupts_ch2_sll0_watieCov,
+    mupts_ch2_sll1,
+    mupts_ch2_sll1_str,
+    mupts_ch2_sll1_watieCov,
+    
+    mupts_ch3_sll0,
+    mupts_ch3_sll0_str,
+    mupts_ch3_sll0_watieCov,
+    mupts_ch3_sll1,
+    mupts_ch3_sll1_str,
+    mupts_ch3_sll1_watieCov,
+    
 }mutil_pt100_state_def;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typedef struct
 {
+    sdt_int32s              temperature[4];
     sdt_int32u              rd_adc_value[5];
     sdt_int8u               try_count;
     mutil_pt100_state_def   mutil_pt100_state;
     sdt_int32u              ref_adc_value;
+    sdt_int32u              onewire_adc_value;
+    sdt_int32u              twowire_adc_value;
     timerClock_def          timer_wayChg;
     sim_spi_oop_def         mmp_spi;
     sdt_bool(*mpp_pull_DRDY)(void);
@@ -256,7 +274,7 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
         }
         case mupts_ref_select:
         {
-            pMix_oop->mpp_select_way(7);   //选择通道7
+            pMix_oop->mpp_select_way(7);   //选择通道7，标准电阻
             sdt_int8u reg_0 = 0x25;
             ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN0  AIN3
             pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
@@ -281,6 +299,7 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
                 pMix_oop->try_count ++;
                 if(pMix_oop->try_count > 4)
                 {
+                    pMix_oop->ref_adc_value = pMix_oop->rd_adc_value[1];
                     pMix_oop->mutil_pt100_state = mupts_ch0_sll0;
                 }
                 else
@@ -292,7 +311,7 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
         }
         case mupts_ch0_sll0:
         {
-            pMix_oop->mpp_select_way(0);   //选择通道7
+            pMix_oop->mpp_select_way(0);   //选择通道0,两根线阻
             sdt_int8u reg_0 = 0x45;
             ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN1  AIN3
             pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
@@ -317,6 +336,7 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
                 pMix_oop->try_count ++;
                 if(pMix_oop->try_count > 4)
                 {
+                    pMix_oop->twowire_adc_value = pMix_oop->rd_adc_value[1];
                     pMix_oop->mutil_pt100_state = mupts_ch0_sll1;
                 }
                 else
@@ -329,7 +349,7 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
         case mupts_ch0_sll1:
         {
             sdt_int8u reg_0 = 0x55;
-            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN2  AIN3
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN2  AIN3 ，一根线阻
             pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
             pMix_oop->try_count = 0;
             pMix_oop->mutil_pt100_state = mupts_ch0_sll1_str;
@@ -352,8 +372,217 @@ static void mutil_pt100_oop_task(mutil_pt100_oop_def* pMix_oop)
                 pMix_oop->try_count ++;
                 if(pMix_oop->try_count > 4)
                 {//采样完毕，计算温度值,
+                    pMix_oop->onewire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->temperature[0] = calc_temperature_pt100(pMix_oop->ref_adc_value,pMix_oop->onewire_adc_value,pMix_oop->twowire_adc_value);
                     
                     pMix_oop->mutil_pt100_state = mupts_ch1_sll0;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch1_sll0:
+        {
+            pMix_oop->mpp_select_way(1);   //选择通道1,两根线阻
+            sdt_int8u reg_0 = 0x45;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN1  AIN3
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch1_sll0_str;
+            break;
+        }
+        case mupts_ch1_sll0_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch1_sll0_watieCov;
+            break;
+        }
+        case mupts_ch1_sll0_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {
+                    pMix_oop->twowire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->mutil_pt100_state = mupts_ch1_sll1;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch1_sll1:
+        {
+            sdt_int8u reg_0 = 0x55;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN2  AIN3 ，一根线阻
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch1_sll1_str;
+            break;
+        }
+        case mupts_ch1_sll1_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch1_sll1_watieCov;
+            break;
+        }
+        case mupts_ch1_sll1_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {//采样完毕，计算温度值,
+                    pMix_oop->onewire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->temperature[1] = calc_temperature_pt100(pMix_oop->ref_adc_value,pMix_oop->onewire_adc_value,pMix_oop->twowire_adc_value);
+                    
+                    pMix_oop->mutil_pt100_state = mupts_ch2_sll0;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch2_sll0:
+        {
+            pMix_oop->mpp_select_way(2);   //选择通道2,两根线阻
+            sdt_int8u reg_0 = 0x45;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN1  AIN3
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch2_sll0_str;
+            break;
+        }
+        case mupts_ch2_sll0_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch2_sll0_watieCov;
+            break;
+        }
+        case mupts_ch2_sll0_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {
+                    pMix_oop->twowire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->mutil_pt100_state = mupts_ch2_sll1;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch2_sll1:
+        {
+            sdt_int8u reg_0 = 0x55;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN2  AIN3 ，一根线阻
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch2_sll1_str;
+            break;
+        }
+        case mupts_ch2_sll1_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch2_sll1_watieCov;
+            break;
+        }
+        case mupts_ch2_sll1_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {//采样完毕，计算温度值,
+                    pMix_oop->onewire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->temperature[2] = calc_temperature_pt100(pMix_oop->ref_adc_value,pMix_oop->onewire_adc_value,pMix_oop->twowire_adc_value);
+                    
+                    pMix_oop->mutil_pt100_state = mupts_ch3_sll0;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch3_sll0:
+        {
+            pMix_oop->mpp_select_way(3);   //选择通道2,两根线阻
+            sdt_int8u reg_0 = 0x45;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN1  AIN3
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch3_sll0_str;
+            break;
+        }
+        case mupts_ch3_sll0_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch3_sll0_watieCov;
+            break;
+        }
+        case mupts_ch3_sll0_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {
+                    pMix_oop->twowire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->mutil_pt100_state = mupts_ch3_sll1;
+                }
+                else
+                {
+                    sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08);  //restart
+                }
+            }
+            break;
+        }
+        case mupts_ch3_sll1:
+        {
+            sdt_int8u reg_0 = 0x55;
+            ads1220_write_register(&pMix_oop->mmp_spi,0,1,&reg_0);   //AIN2  AIN3 ，一根线阻
+            //pbc_reload_timerClock(&pMix_oop->timer_wayChg,TIME_CHANGE_MS);
+            pMix_oop->try_count = 0;
+            pMix_oop->mutil_pt100_state = mupts_ch3_sll1_str;
+            break;
+        }
+        case mupts_ch3_sll1_str:
+        {
+            sim_spi_write_one_byte(&pMix_oop->mmp_spi,0x08); //start conversation
+            pMix_oop->mutil_pt100_state = mupts_ch3_sll1_watieCov;
+            break;
+        }
+        case mupts_ch3_sll1_watieCov:
+        {
+            if(sdt_false == pMix_oop->mpp_pull_DRDY())  //低电平有效
+            {
+                pMix_oop->rd_adc_value[pMix_oop->try_count] = ads1220_read_adc_value(&pMix_oop->mmp_spi);
+                pMix_oop->try_count ++;
+                if(pMix_oop->try_count > 4)
+                {//采样完毕，计算温度值,
+                    pMix_oop->onewire_adc_value = pMix_oop->rd_adc_value[1];
+                    pMix_oop->temperature[3] = calc_temperature_pt100(pMix_oop->ref_adc_value,pMix_oop->onewire_adc_value,pMix_oop->twowire_adc_value);
+                    
+                    pMix_oop->mutil_pt100_state = mupts_idle;
                 }
                 else
                 {
@@ -438,8 +667,14 @@ void mde_mutil_pt100_task(void)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void mde_push_start_conver(sdt_int8u in_solidNum)
 {
-    mutil_pt100_solid[in_solidNum].mutil_pt100_state = mupts_ref_select;
+    if(mupts_idle == mutil_pt100_solid[in_solidNum].mutil_pt100_state)
+    {
+        mutil_pt100_solid[in_solidNum].mutil_pt100_state = mupts_ref_select;
+    }
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+sdt_int32s mde_pull_temperature(sdt_int8u in_solidNum,sdt_int8u in_way)
+{
+    return(mutil_pt100_solid[in_solidNum].temperature[in_way]);
+}
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

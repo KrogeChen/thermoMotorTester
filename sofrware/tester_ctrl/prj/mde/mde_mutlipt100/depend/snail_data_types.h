@@ -15,8 +15,8 @@ typedef signed   short       sdt_int16s;                   /* Signed   16 bit qu
 typedef unsigned long        sdt_int32u;                   /* Unsigned 32 bit quantity      */
 typedef signed   long        sdt_int32s;                   /* Signed   32 bit quantity      */
 //iarstm8 不支持64bit的数据
-//typedef unsigned long long   sdt_int64u;                   /* Unsigned 64 bit quantity      */
-//typedef signed   long long   sdt_int64s;                   /* Signed   64 bit quantity      */
+typedef unsigned long long   sdt_int64u;                   /* Unsigned 64 bit quantity      */
+typedef signed   long long   sdt_int64s;                   /* Signed   64 bit quantity      */
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #define sdt_true    0x01                                /*布尔运算真值*/
 #define sdt_false   0x00                                /*布尔运算假值*/

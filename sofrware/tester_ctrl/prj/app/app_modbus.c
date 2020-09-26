@@ -136,6 +136,26 @@ void app_modbus_task(void)
                         reg_detailes = app_pull_second_3_5T();
                         break;
                     }
+                    case regAddr_m_pt100_tway_0:
+                    {
+                        reg_detailes = app_pull_pt100_temperature(0);
+                        break;
+                    }
+                    case regAddr_m_pt100_tway_1:
+                    {
+                        reg_detailes = app_pull_pt100_temperature(1);
+                        break;
+                    }
+                    case regAddr_m_pt100_tway_2:
+                    {
+                        reg_detailes = app_pull_pt100_temperature(2);
+                        break;
+                    }
+                    case regAddr_m_pt100_tway_3:
+                    {
+                        reg_detailes = app_pull_pt100_temperature(3);
+                        break;
+                    }
                     default:
                     {
                         reg_detailes = 0;
