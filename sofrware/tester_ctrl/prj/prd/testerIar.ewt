@@ -2556,6 +2556,24 @@
         <name>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.h</name>
       </file>
     </group>
+    <group>
+      <name>mde_watchdog</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_watchdog\depend\bsp_watchdog.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_watchdog\depend\bsp_watchdog.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_watchdog\mde_watchdog.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_watchdog\mde_watchdog.h</name>
+      </file>
+    </group>
   </group>
   <group>
     <name>pbc</name>

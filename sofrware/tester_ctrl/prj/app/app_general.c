@@ -34,8 +34,10 @@ void app_general_task(void)
 {
     static sdt_bool sys_cfged = sdt_false;
 
+    mde_watchdog_reload();
     if(sys_cfged)
     {
+        
         mde_input_port_task();
         mde_ledBlink_task();
         app_grating_task();
@@ -47,7 +49,7 @@ void app_general_task(void)
     else
     {
         sys_cfged = sdt_true;
-        mde_systemClock_cfg();
+        
         app_read_run_parameter();
     }
 }

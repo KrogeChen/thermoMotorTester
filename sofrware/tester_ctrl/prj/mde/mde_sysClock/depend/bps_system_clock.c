@@ -49,9 +49,9 @@ void bsp_clock_cfg(void)
 //设置中断向量的指向
 //-----------------------------------------------------------------------------
     #ifdef NDEBUG
-    NVIC_SetVectorTable(NVIC_VectTab_FLASH,0x00005000);        //中断向量定位到Flash
+    NVIC_SetVectorTable(NVIC_VectTab_FLASH,0x00002000);        //中断向量定位到Flash
     #else
-    NVIC_SetVectorTable(NVIC_VectTab_FLASH,0x00000000);   
+    NVIC_SetVectorTable(NVIC_VectTab_FLASH,0x00002000);   
     #endif
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 //-----------------------------------------------------------------------------
