@@ -42,6 +42,22 @@
     <encoding>UTF-8</encoding>
   </override>
   <override>
+    <path>C:\Users\kroge\krogeWork\github\thermoMotorTester\sofrware\tester_ctrl\prj\mde\mde_upgradeFiles\depend\bsp_upgradeFiles.c</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
+    <path>C:\Users\kroge\krogeWork\github\thermoMotorTester\sofrware\tester_ctrl\prj\mde\mde_upgradeFiles\depend\bsp_upgradeFiles.h</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
+    <path>C:\Users\kroge\krogeWork\github\thermoMotorTester\sofrware\tester_ctrl\prj\mde\mde_upgradeFiles\mde_upgradeFiles.c</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
+    <path>C:\Users\kroge\krogeWork\github\thermoMotorTester\sofrware\tester_ctrl\prj\mde\mde_upgradeFiles\mde_upgradeFiles.h</path>
+    <encoding>UTF-8</encoding>
+  </override>
+  <override>
     <path>C:\Users\kroge\krogeWork\github\thermoMotorTester\sofrware\tester_ctrl\prj\pbc\pbc_Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h</path>
     <encoding>UTF-8</encoding>
   </override>

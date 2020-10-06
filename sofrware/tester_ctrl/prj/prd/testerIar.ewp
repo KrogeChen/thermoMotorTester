@@ -1981,6 +1981,24 @@
   <group>
     <name>mde</name>
     <group>
+      <name>mde_boughLink</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_boughLink\depend\bsp_boughLink.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_boughLink\depend\bsp_boughLink.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_boughLink\mde_boughLink.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_boughLink\mde_boughLink.h</name>
+      </file>
+    </group>
+    <group>
       <name>mde_digitInput</name>
       <group>
         <name>depend</name>
@@ -2167,6 +2185,24 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.h</name>
+      </file>
+    </group>
+    <group>
+      <name>mde_upgradeFiles</name>
+      <group>
+        <name>depend</name>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_upgradeFiles\depend\bsp_upgradeFiles.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\mde\mde_upgradeFiles\depend\bsp_upgradeFiles.h</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_upgradeFiles\mde_upgradeFiles.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\mde\mde_upgradeFiles\mde_upgradeFiles.h</name>
       </file>
     </group>
     <group>

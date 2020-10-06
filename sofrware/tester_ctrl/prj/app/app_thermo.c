@@ -329,6 +329,8 @@ static sdt_int32s measure_now;
 static sdt_int32s measure_max;
 static sdt_int16u time_second;
 static sdt_int16u second_for_3500um;
+static sdt_int16s temperature_now;
+static sdt_int16s temperature_max;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_thermoMotor_ts(void)
 {
@@ -365,6 +367,8 @@ void app_thermoMotor_ts(void)
         {
             measure_now = 0;
             measure_max = 0;
+            temperature_now = app_pull_pt100_temperature(0);
+            temperature_max = temperature_now;
             time_second = 0;
             app_push_local_gui_sm(mgs_ms_loading);
             weight_motor_update(wmotor_ctrl_down,LOAD_MOTO_RUNT);
@@ -384,6 +388,8 @@ void app_thermoMotor_ts(void)
             thermoMotor_heat_enable();
             measure_now = 0;
             measure_max = 0;
+            temperature_now = app_pull_pt100_temperature(0);
+            temperature_max = temperature_now;    
             time_second = 0;
             locked_max = 0;
             second_for_3500um = 0;
@@ -419,6 +425,11 @@ void app_thermoMotor_ts(void)
                     {
                         second_for_3500um = time_second;
                     }
+                }
+                temperature_now = app_pull_pt100_temperature(0);
+                if(temperature_max <= temperature_now)
+                {
+                    temperature_max = temperature_now;
                 }
             }
             if(pbc_pull_timerIsCompleted(&timer_timeout))
@@ -464,6 +475,8 @@ void app_thermoMotor_ts(void)
                 pbc_reload_timerClock(&timer_measue_period,1000);
                 time_second ++;
                 measure_now += app_pull_increment_um();
+                
+                temperature_now = app_pull_pt100_temperature(0);
             }
             break;
         }
@@ -491,6 +504,16 @@ sdt_int32s app_pull_stroke_measure(void)
 sdt_int16u app_pull_stroke_time(void)
 {
     return(time_second);
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+sdt_int16s app_pull_ptcTemperature_now(void)
+{
+    return(temperature_now);
+}
+//-----------------------------------------------------------------------------
+sdt_int16s app_pull_ptcTemperature_max(void)
+{
+    return(temperature_max);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //获取测量状态

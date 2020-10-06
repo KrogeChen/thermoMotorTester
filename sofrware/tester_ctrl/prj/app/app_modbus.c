@@ -156,6 +156,16 @@ void app_modbus_task(void)
                         reg_detailes = app_pull_pt100_temperature(3);
                         break;
                     }
+                    case regAddr_m_temperature_now:
+                    {
+                        reg_detailes = app_pull_ptcTemperature_now();
+                        break;
+                    }
+                    case regAddr_m_temperature_max:
+                    {
+                        reg_detailes = app_pull_ptcTemperature_max();
+                        break;
+                    }
                     default:
                     {
                         reg_detailes = 0;
