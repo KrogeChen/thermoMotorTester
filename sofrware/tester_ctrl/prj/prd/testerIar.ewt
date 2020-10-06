@@ -2362,6 +2362,12 @@
       <name>$PROJ_DIR$\..\app\app_thermo.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\app\app_upgrade_boughProtocol.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_upgrade_boughProtocol.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\main.c</name>
     </file>
   </group>

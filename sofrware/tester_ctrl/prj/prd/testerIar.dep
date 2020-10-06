@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>687581445</fileChecksum>
+  <fileChecksum>240059389</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -1703,7 +1703,10 @@
       <file>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.h</file>
       <file>$PROJ_DIR$\..\mde\mde_sysClock\mde_system_clock.c</file>
       <file>$PROJ_DIR$\..\mde\mde_upgradeFiles\depend\bsp_upgradeFiles.c</file>
+      <file>$PROJ_DIR$\Release\Obj\app_upgrade_boughProtocol.o</file>
       <file>$PROJ_DIR$\..\mde\mde_upgradeFiles\depend\snail_data_types.h</file>
+      <file>$PROJ_DIR$\..\app\app_upgrade_boughProtocol.c</file>
+      <file>$PROJ_DIR$\..\app\app_upgrade_boughProtocol.h</file>
       <file>$PROJ_DIR$\Release\Obj\bsp_boughLink.o</file>
       <file>$PROJ_DIR$\Release\Obj\bsp_boughLink.pbi</file>
       <file>$PROJ_DIR$\..\mde\mde_boughLink\depend\bsp_boughLink.c</file>
@@ -1714,6 +1717,7 @@
       <file>$PROJ_DIR$\..\mde\mde_boughLink\depend\snail_data_types.h</file>
       <file>$PROJ_DIR$\..\mde\mde_boughLink\depend\bsp_boughLink.h</file>
       <file>$PROJ_DIR$\..\mde\mde_boughLink\depend\Fifo_Macros.h</file>
+      <file>$PROJ_DIR$\Release\Obj\app_upgrade_boughProtocol.pbi</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
@@ -2797,11 +2801,11 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 286 248 264 271 272</file>
+          <file> 287 248 264 271 272</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 272 286 264 248 271</file>
+          <file> 272 287 264 248 271</file>
         </tool>
       </inputs>
     </file>
@@ -2959,11 +2963,30 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 132 148 129 246 254 244 156 249 153 157 164 152 189 253 252 124 165 145 130 149 257 146 127 159 286 138 259 161 137 139 158 141 185 177 133 144 155 247 134 255</file>
+          <file> 132 148 129 246 254 244 156 249 153 157 164 152 189 253 252 124 165 145 130 149 257 146 127 159 287 138 259 161 137 139 158 141 185 177 133 144 155 247 134 255</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 286 132 253 153 129 259 157 165 148 124 161 138 137 145 156 244 252 130 139 164 158 149 141 254 185 257 177 152 133 146 144 249 155 127 247 189 134 159 255 246</file>
+          <file> 287 132 253 153 129 259 157 165 148 124 161 138 137 145 156 244 252 130 139 164 158 149 141 254 185 257 177 152 133 146 144 249 155 127 247 189 134 159 255 246</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\app\app_upgrade_boughProtocol.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 300</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 211 224 237 218 268 231 228 283 221 3 140 226 240 239 248 214 209 197 194 216 235</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 235 140 231 226 237 240 228 239 224 248 283 214 218 209 221 197 211 194 3 216 268</file>
         </tool>
       </inputs>
     </file>
@@ -2972,17 +2995,17 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 288</file>
+          <file> 291</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 287</file>
+          <file> 290</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 129 296 145 294</file>
+          <file> 129 299 145 297</file>
         </tool>
       </inputs>
     </file>
@@ -2991,17 +3014,17 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 292</file>
+          <file> 295</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 293</file>
+          <file> 296</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 270 248 291 295 294</file>
+          <file> 270 248 294 298 297</file>
         </tool>
       </inputs>
     </file>
