@@ -193,23 +193,58 @@ static void write_block_to_flash(sdt_int32u* in_pRam,block_storage_parameter_def
         }
     }
     sdt_int32u checksum;
-    sdt_int32u offset = 0;
+    sdt_int32u offset;
     sdt_int32u length_w;
+//------------------------------------------------------------------------------比较数据是否有改变
+    block_def rd_block_s;
+    sdt_int32u* pRam_new_data;
+    sdt_bool data_changed = sdt_false;
     
-    checksum = make_ram_memory_checksum(w_next_cnt,in_pRam,in_block_SP->storage_length_w);
-    length_w = in_block_SP->storage_length_w;
-    
-    in_block_SP->passage_flash_memory_write(block_select,0,w_next_cnt);
+    if(block_first == block_select)
+    {
+        rd_block_s = block_second;
+    }
+    else
+    {
+        rd_block_s = block_first;
+    }
     offset = 1;
+    pRam_new_data = in_pRam;
+    length_w = in_block_SP->storage_length_w;
     while(length_w)
     {
-        in_block_SP->passage_flash_memory_write(block_select,offset,*in_pRam);
+        if(Error&(ErrOneBit|ErrTwoBit))
+        {
+            data_changed = sdt_true;
+            break;   
+        }
+        else if(*pRam_new_data != in_block_SP->passage_flash_memory_read(rd_block_s,offset))
+        { 
+            data_changed = sdt_true;
+            break;
+        }
         offset ++;
-        in_pRam ++;
+        pRam_new_data ++;
         length_w --;
     }
-    in_block_SP->passage_flash_memory_write(block_select,offset,checksum);
-    in_block_SP->passage_flash_write_complete();
+//------------------------------------------------------------------------------
+    if(data_changed)
+    {
+        checksum = make_ram_memory_checksum(w_next_cnt,in_pRam,in_block_SP->storage_length_w);
+        length_w = in_block_SP->storage_length_w;
+        
+        in_block_SP->passage_flash_memory_write(block_select,0,w_next_cnt);
+        offset = 1;
+        while(length_w)
+        {
+            in_block_SP->passage_flash_memory_write(block_select,offset,*in_pRam);
+            offset ++;
+            in_pRam ++;
+            length_w --;
+        }
+        in_block_SP->passage_flash_memory_write(block_select,offset,checksum);
+        in_block_SP->passage_flash_write_complete();
+    }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //长度设置，要求入口长度32bits对齐

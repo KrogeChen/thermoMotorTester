@@ -4,7 +4,7 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typedef union
 {
-    sdt_int32u sto_data[32];
+    sdt_int32u sto_data[256];
     struct
     {
         sdt_int32s  grating_up_site_um;        //上行到位位置值
