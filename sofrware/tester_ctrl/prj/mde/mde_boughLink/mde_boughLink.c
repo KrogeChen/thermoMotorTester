@@ -3,7 +3,7 @@
 #include ".\depend\bsp_boughLink.h"
 #include ".\mde_boughLink.h"
 #include "..\..\pbc\pbc_sysTick\pbc_sysTick.h"
-#include "..\mde_sysClock\Mde_SysClock.h"
+#include "..\mde_sysClock\mde_system_clock.h"
 #include "..\..\pbc\pbc_crc16\pbc_crc16.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //-------------------------------------------------------------------------------------------------
@@ -403,7 +403,7 @@ void Mde_Local_BoughLink_Task(void)
     }
     else
     {
-        Uart3_Configure();
+        Uart2_Configure();
         Cfged = sdt_true;
     }
 }

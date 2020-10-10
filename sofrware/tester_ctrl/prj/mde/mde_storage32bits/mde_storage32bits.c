@@ -237,6 +237,7 @@ static sdt_bool cfged = sdt_false;
 static void block_storage_solid_cfg(void)
 {
 //-----------------------------------------------------------------------------
+    bsp_flash_memory_cfg();
     block_storage_solid[0].passage_flash_memory_read = bsp_passage_flash_memory_read;
     block_storage_solid[0].passage_flash_memory_write = bsp_passage_flash_memory_write;
     block_storage_solid[0].passage_flash_write_complete = bsp_passage_flash_write_complete;

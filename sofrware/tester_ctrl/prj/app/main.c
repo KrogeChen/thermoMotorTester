@@ -3,7 +3,7 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 int main (void)
 {
-    mde_device_system_cfg();
+    mde_watchdog_cfg();
     mde_systemClock_cfg();
 //-----------------------------------------------------------------------------
     pbc_createTask_one(app_general_task,0);

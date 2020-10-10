@@ -3,6 +3,7 @@
 #include ".\mde_upgradeFiles.h"
 #include "..\..\pbc\pbc_sysTick\pbc_sysTick.h"
 #include "..\..\pbc\pbc_dataConvert\pbc_dataConvert.h"
+#include "..\..\mde\mde_watchdog\mde_watchdog.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //fireware update task
 //-------------------------------------------------------------------------------------------------
@@ -43,7 +44,10 @@ void mde_upgrade_files_task(void)
         {
             if(pbc_pull_timerIsCompleted(&timer_reset))
             {
-                while(1); //wait watchdog timeout
+                while(1)//; //wait watchdog timeout
+                {
+                    //mde_watchdog_reload();
+                }
             }
             break;
         }

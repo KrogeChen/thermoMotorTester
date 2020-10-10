@@ -1,7 +1,7 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #include ".\depend\bsp_watchdog.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void mde_device_system_cfg(void)
+void mde_watchdog_cfg(void)
 {
     #ifdef NDEBUG
     bsp_watchdog_cfg(); 

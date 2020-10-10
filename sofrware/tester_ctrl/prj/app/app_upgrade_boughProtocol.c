@@ -143,7 +143,7 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                         if((128+6) == _In_pReceiveData->PayloadLength)
                         {
                             sdt_int8u err;
-                            err = app_push_fileMap(&_In_pReceiveData->Payload[6],sdt_false);
+                            err = mde_push_fileMap(&_In_pReceiveData->Payload[6],sdt_false);
                             if(err)
                             {
                                 Bough_AnswerErrorReport(&_Out_pTransmitData->Payload[0],err);
@@ -154,7 +154,10 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                                 _Out_pTransmitData->Payload[1] = (BGEUCMD_StrUpgrade_map | 0x80);  //Command
                                 _Out_pTransmitData->Payload[2] = BGEUSTS_QueryFile;                   //Status,请求FileMap
                                 _Out_pTransmitData->Payload[3] = BGEUERR_NoneError;                                     //Error Code
-                                pbc_int16uToArray_bigEndian(app_pull_next_blockNumber(),&_Out_pTransmitData->Payload[4]);
+                                
+                                sdt_int16u next_block_number;
+                                mde_pull_upgrade_next_block(&next_block_number);
+                                pbc_int16uToArray_bigEndian(next_block_number,&_Out_pTransmitData->Payload[4]);
                                 _Out_pTransmitData->PayloadLength = 6;                                   
                             }
                         }
@@ -170,7 +173,7 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                         if((128+6) == _In_pReceiveData->PayloadLength)
                         {
                             sdt_int8u err;
-                            err = app_push_fileMap(&_In_pReceiveData->Payload[6],sdt_true);
+                            err = mde_push_fileMap(&_In_pReceiveData->Payload[6],sdt_true);
                             if(err)
                             {
                                 Bough_AnswerErrorReport(&_Out_pTransmitData->Payload[0],err);
@@ -181,7 +184,10 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                                 _Out_pTransmitData->Payload[1] = (BGEUCMD_ResumeUpgrade_map | 0x80);        //Command
                                 _Out_pTransmitData->Payload[2] = BGEUSTS_QueryFile;                  //Status,请求FileMap
                                 _Out_pTransmitData->Payload[3] = BGEUERR_NoneError;                    //Error Code
-                                pbc_int16uToArray_bigEndian(app_pull_next_blockNumber(),&_Out_pTransmitData->Payload[4]);
+                                
+                                sdt_int16u next_block_number;
+                                mde_pull_upgrade_next_block(&next_block_number);
+                                pbc_int16uToArray_bigEndian(next_block_number,&_Out_pTransmitData->Payload[4]);
                                 _Out_pTransmitData->PayloadLength = 6;                                     
                             }
                         }
@@ -197,13 +203,17 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                         {
                             sdt_int8u ErrorCode = BGEUERR_NoneError;
 
-                            ErrorCode = app_push_files(pbc_arrayToInt16u_bigEndian(&_In_pReceiveData->Payload[4]),&_In_pReceiveData->Payload[6]);  //处理接收报文
+                            ErrorCode = mde_push_files_one_block(pbc_arrayToInt16u_bigEndian(&_In_pReceiveData->Payload[4]),&_In_pReceiveData->Payload[6]);  //处理接收报文
                             
+                            sdt_bool completed;
+                            sdt_int16u next_block_number;
+                            
+                            completed = mde_pull_upgrade_next_block(&next_block_number);
                             if(ErrorCode)
                             {
                                 _Out_pTransmitData->PayloadLength = Bough_AnswerErrorReport(&_Out_pTransmitData->Payload[0],ErrorCode);
                             }
-                            else if(app_pull_upgradeIsComplete())
+                            else if(completed)
                             {
                                 _Out_pTransmitData->Payload[0] = THE_VER;                              //Version
                                 _Out_pTransmitData->Payload[1] = (BGEUCMD_TransferFile | 0x80);         //Command
@@ -219,8 +229,8 @@ sdt_bool Bough_EasyUpgrade_Protocol(BoughLinkCommData_Def* _In_pReceiveData,sdt_
                                 _Out_pTransmitData->Payload[1] = (BGEUCMD_TransferFile | 0x80);     //Command
                                 _Out_pTransmitData->Payload[2] = BGEUSTS_QueryFile;                 //Status,请求File
                                 _Out_pTransmitData->Payload[3] = BGEUERR_NoneError;                 //Error Is not
-                                 pbc_int16uToArray_bigEndian(app_pull_next_blockNumber(),&_Out_pTransmitData->Payload[4]);
-                                 _Out_pTransmitData->PayloadLength = 6;    
+                                pbc_int16uToArray_bigEndian(next_block_number,&_Out_pTransmitData->Payload[4]);
+                                _Out_pTransmitData->PayloadLength = 6;    
                             }
                         }
                         else
@@ -317,6 +327,7 @@ void APP_BoughUpgradeProtocol_Task(void)
     sdt_int8u local_addr[6]={0x00,0x04,0xA3,0x00,0x00,0x02};
 
     Mde_Local_BoughLink_Task();
+    mde_upgrade_files_task();
     pReceiveData = Pull_Local_MessageFromBoughLink(&ReceiveOneMessage);
     if(ReceiveOneMessage)
     { 
@@ -357,8 +368,8 @@ void APP_BoughUpgradeProtocol_Task(void)
         
                 TransmitData.Payload[0] = 0x00;   
                 TransmitData.Payload[1] = 0x03;    
-                TransmitData.Payload[2] = app_pull_distance_mm() >> 8;
-                TransmitData.Payload[3] = app_pull_distance_mm();
+                TransmitData.Payload[2] = 0x00;//app_pull_distance_mm() >> 8;
+                TransmitData.Payload[3] = 0x00;//app_pull_distance_mm();
                 TransmitData.PayloadLength = 4;   
                 if(Pull_Local_TransmitIsReady())
                 {

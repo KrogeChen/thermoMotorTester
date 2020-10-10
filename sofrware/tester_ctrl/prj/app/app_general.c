@@ -45,6 +45,7 @@ void app_general_task(void)
         app_sto_run_parameter_task();
         app_electrimeter_task();
         app_pt100_task();
+        APP_BoughUpgradeProtocol_Task();
     }
     else
     {
