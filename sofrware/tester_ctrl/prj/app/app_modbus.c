@@ -166,6 +166,11 @@ void app_modbus_task(void)
                         reg_detailes = app_pull_ptcTemperature_max();
                         break;
                     }
+                    case regAddr_m_timeout_heating:
+                    {
+                        reg_detailes = StoRunParamter.timeout_heating;
+                        break;
+                    }
                     default:
                     {
                         reg_detailes = 0;
@@ -206,14 +211,14 @@ void app_modbus_task(void)
                             {
                                 if(app_pull_vp_selected())
                                 {
-                                    local_gui.m_gui_menu = (modbus_gui_menu_def)reg_detailes;
+                                    local_gui.m_gui_menu = (modbus_gui_menu_def)rd_wReg_details;
                                 }                              
                             }
                             break;
                         }
                         case regAddr_m_gui_sm:
                         {
-                            //local_gui.m_gui_sm = reg_detailes;
+                            //local_gui.m_gui_sm = rd_wReg_details;
                             break;
                         }
                         case regAddr_m_gui_bits:
@@ -296,6 +301,15 @@ void app_modbus_task(void)
                         case regAddr_m_select_product:
                         {
                             app_push_product_select(rd_wReg_details);
+                            break;
+                        }
+                        case regAddr_m_timeout_heating:
+                        {
+                            if(rd_wReg_details != StoRunParamter.timeout_heating)
+                            {
+                                StoRunParamter.timeout_heating = rd_wReg_details;
+                                app_push_once_save_sto_parameter();                                
+                            }
                             break;
                         }
                         default:

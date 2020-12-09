@@ -12,6 +12,7 @@ typedef union
         sdt_int32s  grating_zero_logic_um;     //逻辑零点值
         sdt_int16u  select_voltage;
         sdt_int16u  select_product;
+        sdt_int16u  timeout_heating;           //180-600s
 
     };
 }StoRunParamter_Def;

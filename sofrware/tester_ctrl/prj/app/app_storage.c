@@ -27,6 +27,7 @@ void app_read_run_parameter(void)
     }
     else
     {
+        StoRunParamter.timeout_heating = 300;
     }   
     #ifndef NDEBUG
     mde_write_storage_block(0,&StoRunParamter.sto_data[0]);

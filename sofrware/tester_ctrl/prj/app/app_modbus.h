@@ -71,6 +71,7 @@ typedef struct
 #define regAddr_m_pt100_tway_3     0x0015
 #define regAddr_m_temperature_now  0x0016  //当前PTC温度
 #define regAddr_m_temperature_max  0x0017  //最大PTC温度
+#define regAddr_m_timeout_heating  0x0018  //加热时间
 //-----------------------------------------------------------------------------
 void app_modbus_task(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

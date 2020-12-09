@@ -21,19 +21,20 @@
 		ReadLocal("LW", 200, 2, (void*)buf, 0);
 		WriteLocal("LW", 202, 2, (void*)buf, 0);
 */
-//200ms循环
+//100ms循环
 //----------------------------------------------------------------
 typedef enum
 
 {   
 
-    mgm_select           = 0x00,//电压、产品选择
+    mgm_select           = 0x0000,//电压、产品选择
 
-    mgm_measure          = 0x01,//测量界面
+    mgm_measure          = 0x0001,//测量界面
 
-    mgm_parameter_s      = 0x02,//参数设定
+    mgm_parameter_s      = 0x0002,//参数设定
 
-    mgm_em_stop          = 0x03,//急停
+    mgm_em_stop          = 0x0003,//急停
+    mgm_none             = 0xffff,//初始值
 
 }modbus_gui_menu_def;
 
@@ -80,27 +81,28 @@ typedef union
     unsigned short buff[100];
     struct
     {
+        unsigned short cfged;
+        modbus_gui_menu_def        main_gui_menu;
+        modbus_gui_s_measure_def   son_measure_menu; //测量子菜单
+        
         modbus_gui_def  modbus_gui;
         unsigned short backup_key_ss;
         unsigned short locked_menu_cnt;
         unsigned short backup_second;
 		
+        unsigned short one_second;
         short test_s;
         float test_f;
     };
-}sc_parameter_def;
+}pbulic_para_def;
 
-sc_parameter_def  sc_parameter;
+pbulic_para_def  pbulic_para;
 //-----------------------------------------------------------------
 //窗口索引
-#define win_ix_rg_site      "LW"
-#define win_ix_rg_addr      50
 #define WIN_SELECT          10
 #define WIN_MEASURE         0
 //--------------------------------------------------------------------
 //测量状态值
-#define measure_states_rg_stie     "LW"
-#define measure_states_rg_addr      19
 #define MSS_S_IDLE                  0
 #define MSS_S_DOWN_W                1
 #define MSS_S_MEASURE               2
@@ -187,256 +189,343 @@ sc_parameter_def  sc_parameter;
 #define regAddr_m_select_voltage   0x000F//电压等级
 #define regAddr_m_select_product   0x0010//产品类型
 #define regAddr_m_second_3_5T      0x0011//3.5行程时间
+#define regAddr_m_pt100_tway_0     0x0012//温度值0通道  
+#define regAddr_m_pt100_tway_1     0x0013
+#define regAddr_m_pt100_tway_2     0x0014
+#define regAddr_m_pt100_tway_3     0x0015
+#define regAddr_m_temperature_now  0x0016  //当前PTC温度
+#define regAddr_m_temperature_max  0x0017  //最大PTC温度
+#define regAddr_m_timeout_heating  0x0018  //加热时间
+//++++++++++++++++++++++++++++++++++++++
+//LW内存分配
+//窗口参数:电压选择、产品选择、加热时间选择
+#define chart_X_second_addr      0 //1 word,图表X轴 16bits,short
+#define chart_Y_mm_addr          1 //2 word,图表Y轴 32bits,float
+#define dis_measure_stroke_addr  3 //2 word,当前测量行程
+#define dis_max_stroke_addr      5 //2 word,最大行程
+#define dis_s_25_stroke_addr     7 //1 word,2.5行程时间
+#define dis_s_35_stroke_addr     8 //1 word,3.5行程时间
+#define par_volatge_sel_addr     9 //1 word,电压选择
+#define par_product_sel_addr     10//1 word,产品选择
+#define par_heat_time_addr       11//1 word,加热时间
+#define window_index_addr        12//1 word,显示窗口索引
+#define measure_states_addr      13//1 word,测量状态
+
+#define public_ram_addr          100//100word,全局ram,用于存储全局变量
+//--------------------------------------
+//LB内存分配
+#define key_sel_ok_addr       0
+#define key_start_addr        1
+#define key_stop_addr         2
+#define key_auto_unload_addr  3
+#define key_setup_addr        4
+
+#define chart_pause_addr      20
+#define chart_clear_addr      21
 //++++++++++++++++++++++++++++++++++++++
 
-//++++++++++++++++++++++++++++++++++++++
-void get_remote_gui(void)
-{
-    
-}
-//++++++++++++++++++++++++++++++++++++++
-void read_sc_parameter(void)
-{
-   // 
-    sc_parameter.test_f +=0.001;
-  // WriteLocal("LW",300,100,&sc_parameter.buff[0],0);
-}
 //++++++++++++++++++++++++++++++++++++++
 int MacroEntry()
 {
+//-----------------------------------------------------------------------
+//读取modbus数据
+//-----------------------------------------------------------------------
+	unsigned short ops_modbus_reg[32];
+    unsigned short i;
+    for(i = 0;i  < 32;i ++)
+    {
+        ops_modbus_reg[i] = modbus_rw[i];
+    }
+//-----------------------------------------------------------------------
+    ReadLocal("LW",public_ram_addr,100,&pbulic_para.buff[0],0);
+//-----------------------------------------------------------------------
 //read keyboard
 //-----------------------------------------------------------------------
-	#define key_sel_ok_site     "LB"
-	#define key_sel_ok_addr      100
-	unsigned short key_select;
-	ReadLocal(key_sel_ok_site,key_sel_ok_addr,1,&key_select,0);
-	key_select &= 0x0001;
+
+    
+	unsigned short key_select_ok;//选择完毕,电压、产品、加热时间
+	ReadLocal("LB",key_sel_ok_addr,1,&key_select_ok,0);
+	key_select_ok &= 0x0001;
 	
 	unsigned short key_start;
-	ReadLocal("LB",2,1,&key_start,0);
+	ReadLocal("LB",key_start_addr,1,&key_start,0);
 	key_start &= 0x0001;
 	
 	unsigned short key_stop;
-	ReadLocal("LB",3,1,&key_stop,0);
+	ReadLocal("LB",key_stop_addr,1,&key_stop,0);
 	key_stop &= 0x0001;
 	
 	unsigned short key_auto_unload;
-	ReadLocal("LB",1,1,&key_auto_unload,0);
+	ReadLocal("LB",key_auto_unload_addr,1,&key_auto_unload,0);
 	key_auto_unload &= 0x0001;
+    
+    unsigned short key_setup;
+    ReadLocal("LB",key_setup_addr,1,&key_setup,0);
+    key_setup &= 0x0001;
 //-----------------------------------------------------------------------
-    unsigned short voltage_select_win;
-	ReadLocal("LW",100,1,&voltage_select_win,0);
-	unsigned short product_select_win;
-	ReadLocal("LW",101,1,&product_select_win,0);
-	
+//read chart states
+    unsigned short chart_clear,chart_pause;
+    ReadLocal("LB",chart_pause_addr,1,&chart_pause,0);
+    chart_pause &= 0x0001;
+    ReadLocal("LB",chart_clear_addr,1,&chart_clear,0);
+    chart_clear &= 0x0001;
+    
+    
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //-----------------------------------------------------------------------
-//全局变量数据
-    ReadLocal("LW",1000,100,&sc_parameter.buff[0],0);
-//-----------------------------------------------------------------------
-//modbus数据
-	unsigned short modbus_reg[20];
-    unsigned short i;
-    for(i = 0;i  < 20;i ++)
-    {
-        modbus_reg[i] = modbus_rw[i];
-    }
-//-----------------------------------------------------------------------
-//同步远程数据
-
-    if(0 == sc_parameter.locked_menu_cnt)
-    {
-        sc_parameter.modbus_gui.m_gui_menu = (modbus_gui_menu_def)modbus_reg[regAddr_m_gui_menu];  //加载控制板主菜单
-        sc_parameter.modbus_gui.m_gui_sm =  (modbus_gui_menu_def)modbus_reg[regAddr_m_gui_sm];     //加载控制板子菜单
-    }
-    else
-    {
-        sc_parameter.locked_menu_cnt --;
-    }
-
-    //voltage_select_win = modbus_reg[regAddr_m_select_voltage];
-	//product_select_win = modbus_reg[regAddr_m_select_product];
-//---------------------------------------------------------------------------------------------
-    #define measure_um_rg_stie        "LW"//显示框地址，测量值
-    #define measure_um_rg_addr        10
-	
+//显示框地址，测量值
     signed int rd_measure_um;
-    rd_measure_um = modbus_reg[regAddr_m_msrGt_um_0];
-    rd_measure_um = rd_measure_um<<16;
-    rd_measure_um |= modbus_reg[regAddr_m_msrGt_um_1];
+//    
+//    rd_measure_um = ops_modbus_reg[regAddr_m_msrGt_um_0];
+//    rd_measure_um = rd_measure_um<<16;
+//    rd_measure_um |= ops_modbus_reg[regAddr_m_msrGt_um_1];
+//    
     float s_measure_um;
-    s_measure_um = (float)rd_measure_um/1000;
-    WriteLocal(measure_um_rg_stie,measure_um_rg_addr,2,&s_measure_um ,0);
-//---------------------------------------------------------------------------------------------
-    rd_measure_um = modbus_reg[regAddr_m_msrGt_max_0];
-    rd_measure_um = rd_measure_um<<16;
-    rd_measure_um |= modbus_reg[regAddr_m_msrGt_max_1];
-    float rdf_measure_um;
-    rdf_measure_um = (float)rd_measure_um/1000;
-    WriteLocal("LW",12,2,&rdf_measure_um ,0);//最大值
-//---------------------------------------------------------------------------------------------
+//    
+//    s_measure_um = (float)rd_measure_um/1000;
+//    WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
+//-----------------------------------------------------------------------
+//最大值
+    signed int rd_max_um;
+    rd_max_um = ops_modbus_reg[regAddr_m_msrGt_max_0];
+    rd_max_um = rd_max_um<<16;
+    rd_max_um |= ops_modbus_reg[regAddr_m_msrGt_max_1];
+    float rd_max_measure_um;
+    rd_max_measure_um = (float)rd_max_um/1000;
+    WriteLocal("LW",dis_max_stroke_addr,2,&rd_max_measure_um,0);
+//-----------------------------------------------------------------------
+//3.5mm的时间
     unsigned short rd_35t_second;
-    rd_35t_second = modbus_reg[regAddr_m_second_3_5T];
-    WriteLocal("LW",14,1,&rd_35t_second ,0);//3.5mm的时间
-//---------------------------------------------------------------------------------------------
+    rd_35t_second = ops_modbus_reg[regAddr_m_second_3_5T];
+    //WriteLocal("LW",dis_s_35_stroke_addr,1,&rd_35t_second ,0);
+//-----------------------------------------------------------------------
+//测量时间 
     unsigned short m_second;
-    m_second = modbus_reg[regAddr_m_msrSecond]; //测量时间
-//---------------------------------------------------------------------------------------------
-    unsigned short win_menu;
-    ReadLocal(win_ix_rg_site,win_ix_rg_addr,1,&win_menu,0);//窗口索引
-//---------------------------------------------------------------------------------------------
-    WriteLocal("LW",30,1,&sc_parameter.modbus_gui.m_gui_s_measure ,0);//test code
-	
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    m_second = ops_modbus_reg[regAddr_m_msrSecond];  
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    #define  cfged_flag 0x8976
+//-----------------------------------------------------------------------
     unsigned short show_states = MSS_S_IDLE;
-//---------------------------------------------------------------------------------------------
-    switch(sc_parameter.modbus_gui.m_gui_menu)//主菜单
+    unsigned short local_win_index;
+    unsigned short runing;
+    
+    
+    pbulic_para.one_second ++;
+    if(pbulic_para.one_second > 9)
     {
-         case mgm_select:
-         { 
-             if(WIN_SELECT != win_menu)
-             {
-                 win_menu  = WIN_SELECT;
-             }
+        pbulic_para.one_second = 0;
 
-             WriteLocal("LW",500,1,&key_select ,0);  //test code
-             if(key_select)
-             {
-                 win_menu = WIN_MEASURE;
-                 modbus_rw[regAddr_m_event_bits] = bits_mEBits_selectCMT;
-                 modbus_rw[regAddr_m_gui_menu] = mgm_measure;
-				 modbus_rw[regAddr_m_select_voltage] = voltage_select_win;
-				 modbus_rw[regAddr_m_select_product] = product_select_win;
-                 sc_parameter.modbus_gui.m_gui_menu = mgm_measure;
-                 key_select = 0;
-                 
-                 sc_parameter.locked_menu_cnt =10;
-             }
-             break;
-         }
-         case mgm_measure:
-         {
-
-             if(WIN_MEASURE != win_menu)
-             {
-                 win_menu  = WIN_MEASURE;
-             }
-
-			 switch(sc_parameter.modbus_gui.m_gui_s_measure)//测量子菜单
-			 {
-                case mgs_ms_idle:
-				{
-                    show_states = MSS_S_IDLE;
-
-                    run_states = 0;
-               
-
-					if(key_start)
-					{
-						modbus_rw[regAddr_m_event_bits] = bits_mEBits_start;
-					}
-				    break;
-				}
-				case mgs_ms_loading:
-				{
-                    show_states = MSS_S_DOWN_W;
-					
-                    run_states = 1;
-                    pause_chart = 1;
-                    clear_chart = 1;
-					break;
-				}
-				case mgs_ms_measuring:
-				{
-                    show_states = MSS_S_MEASURE;
-					
-                    if(m_second != sc_parameter.backup_second)
+        pbulic_para.test_s ++;
+        pbulic_para.test_f += 0.05;
+    
+             
+    }
+    pbulic_para.main_gui_menu = mgm_measure;
+    ops_modbus_reg[regAddr_m_gui_sm] = mgs_ms_measuring;
+    m_second = pbulic_para.test_s;
+    s_measure_um = pbulic_para.test_f;   
+    
+    
+    
+    
+    if(cfged_flag == pbulic_para.cfged)
+    {
+        switch(pbulic_para.main_gui_menu)
+        {
+            case mgm_none:
+            {
+                //加载电压、产品选择、加热时间
+                WriteLocal("LW",par_volatge_sel_addr,1,&ops_modbus_reg[regAddr_m_select_voltage] ,0);
+                WriteLocal("LW",par_product_sel_addr,1,&ops_modbus_reg[regAddr_m_select_product] ,0);
+                WriteLocal("LW",par_heat_time_addr,1,&ops_modbus_reg[regAddr_m_timeout_heating] ,0);
+                pbulic_para.main_gui_menu = mgm_select;
+                break;
+            }
+            case mgm_select:
+            {
+                if(key_select_ok)
+                {
+                    key_select_ok = 0;
+                    
+                    ReadLocal("LW",par_volatge_sel_addr,1,&ops_modbus_reg[regAddr_m_select_voltage] ,0); //读取参数
+                    ReadLocal("LW",par_product_sel_addr,1,&ops_modbus_reg[regAddr_m_select_product] ,0);
+                    ReadLocal("LW",par_heat_time_addr,1,&ops_modbus_reg[regAddr_m_timeout_heating] ,0);
+                    chart_clear = 1;    //清除一次图表
+                    chart_pause = 1;
+                    pbulic_para.main_gui_menu = mgm_measure;
+                    ops_modbus_reg[regAddr_m_event_bits] = bits_mEBits_selectCMT;  //选择完成
+                }
+                break;
+            }
+            case mgm_measure:
+            {
+                if(key_setup)
+                {
+                    pbulic_para.main_gui_menu = mgm_select;
+                    ops_modbus_reg[regAddr_m_gui_menu] = mgm_select;  //退回到选择界面
+                }
+                switch(ops_modbus_reg[regAddr_m_gui_sm])  //根据子菜单显示状态
+                {
+                    case mgs_ms_idle:
                     {
-                        if(pause_chart)
+                        pbulic_para.son_measure_menu = ops_modbus_reg[regAddr_m_gui_sm];
+                        show_states = MSS_S_IDLE;
+                        runing = 0;
+                    
+                        if(key_start)
                         {
-                            pause_chart = 0;
-                           //clear_chart = 0;
+                            ops_modbus_reg[regAddr_m_event_bits] = bits_mEBits_start;
+                        }
+                        break;
+                    }
+                    case mgs_ms_loading:
+                    {
+                        if(pbulic_para.son_measure_menu != ops_modbus_reg[regAddr_m_gui_sm])
+                        {
+                            pbulic_para.son_measure_menu = ops_modbus_reg[regAddr_m_gui_sm];
+                            runing = 1;
+                            chart_pause = 1;
+                            chart_clear = 1;
+                            m_second = 0;
+                            s_measure_um = 0;
+                            WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
+                            WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
+                        }
+                        show_states = MSS_S_DOWN_W;
+                        
+  
+                        break;
+                    }
+                    case mgs_ms_measuring:
+                    {
+                        if(pbulic_para.son_measure_menu != ops_modbus_reg[regAddr_m_gui_sm])
+                        {
+                            pbulic_para.son_measure_menu = ops_modbus_reg[regAddr_m_gui_sm];
+                            runing = 1;
+                            chart_pause = 0;
+                            chart_clear = 0;
+                            pbulic_para.backup_second = 0;
+                            m_second = 0;
+                            s_measure_um = 0;
+                            WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
+                            WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
                         }
                         else
                         {
-                            WriteLocal("LW",0,1,&m_second,0);
-                            WriteLocal("LW",1,2,&s_measure_um,0);
+                            if(m_second != pbulic_para.backup_second)
+                            {
+                                pbulic_para.backup_second = m_second;
+                                WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
+                                WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
+                                
+                                 ReadLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
+                                
+                                WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
+                                WriteLocal("LW",dis_s_35_stroke_addr,1,&m_second ,0);
+                            }
                         }
+                        
+                        show_states = MSS_S_MEASURE;
+                        if(key_stop)
+                        {
+                            modbus_rw[regAddr_m_event_bits] = bits_mEBits_stop;
+                        }
+                        break;
                     }
-
-                    if(key_stop)
+                    case mgs_ms_unloading:
                     {
-                        modbus_rw[regAddr_m_event_bits] = bits_mEBits_stop;
+                        show_states = MSS_S_UP_W;
+
+                        break;
                     }
-					break;
-				}
-				case mgs_ms_unloading:
-                {
-                    show_states = MSS_S_UP_W;
-
-					break;
-				}
-				case mgs_ms_complete:
-				{
-                    show_states = MSS_S_COMPLETE;
-
-                    run_states = 0;
-					if(m_second >= 600)
-				    {
-						pause_chart = 1;
-					}
-					else
-					{
-						if(m_second != sc_parameter.backup_second)
-						{
-							if(pause_chart)
-							{
-								pause_chart = 0;
-						       //clear_chart = 0;
-							}
-							else
-							{
-								WriteLocal("LW",0,1,&m_second,0);       //X轴数据
-								WriteLocal("LW",1,2,&s_measure_um,0);   //Y轴数据
-						   }
-						}						
-					}
-
-                    if(key_auto_unload)
+                    case mgs_ms_complete:
                     {
-                        modbus_rw[regAddr_m_event_bits] = bits_mEBits_autoUnload;
-                    }
+                        show_states = MSS_S_COMPLETE;
 
-                    if(key_start)
-                    {
-                        modbus_rw[regAddr_m_event_bits] = bits_mEBits_start;
+                        runing = 0;
+                        if(m_second >= 600)
+                        {
+                            chart_pause = 1;
+                        }
+                        else
+                        {
+                            if(m_second != pbulic_para.backup_second)
+                            {
+                                pbulic_para.backup_second = m_second;
+                                if(chart_pause)
+                                {
+                                    chart_pause = 0;
+                                   //clear_chart = 0;
+                                }
+                                else
+                                {
+                                    WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
+                                    WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
+                               }
+                            }						
+                        }
+
+                        if(key_auto_unload)
+                        {
+                            ops_modbus_reg[regAddr_m_event_bits] = bits_mEBits_autoUnload;
+                        }
+
+                        if(key_start)
+                        {
+                            ops_modbus_reg[regAddr_m_event_bits] = bits_mEBits_start;
+                        }
+                        break;
                     }
-					break;
-				}
-				default:
-				{
-					break;
-				}
-			 }
-             break;
-         }
-         case mgm_parameter_s:
-         {
-             break;
-         }
-         case mgm_em_stop:
-         {
-             break;
-         }
-	     default:
-		 {
-			 break;
-		 }
+                    default:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+            case mgm_parameter_s:
+            {
+                break;
+            }
+            case mgm_em_stop:
+            {
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        pbulic_para.cfged = cfged_flag;
+        pbulic_para.main_gui_menu = mgm_none;
+    }
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+	
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//-----------------------------------------------------------------------
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    WriteLocal("LW",measure_states_addr,1,&show_states,0);
+    WriteLocal("LW",window_index_addr,1,&local_win_index,0);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    WriteLocal("LW",public_ram_addr,100,&pbulic_para.buff[0],0);
+//-----------------------------------------------------------------------------------
+    for(i = 0;i  < 32;i ++)
+    {
+        modbus_rw[i] = ops_modbus_reg[i];//modbus内容回写
     }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    WriteLocal(measure_states_rg_stie,measure_states_rg_addr,1,&show_states,0);
-    WriteLocal(win_ix_rg_site,win_ix_rg_addr,1,&win_menu,0);
-    WriteLocal(key_sel_ok_site,key_sel_ok_addr,1,&key_select,0);
-    WriteLocal("LW",1000,100,&sc_parameter.buff[0],0);
 	return 0;
 }
  

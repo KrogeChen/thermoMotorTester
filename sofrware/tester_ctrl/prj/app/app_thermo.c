@@ -394,7 +394,20 @@ void app_thermoMotor_ts(void)
             locked_max = 0;
             second_for_3500um = 0;
             pbc_reload_timerClock(&timer_measue_period,1000);
-            pbc_reload_timerClock(&timer_timeout,600);
+            
+            
+            sdt_int16u timeout_heating;
+            if(StoRunParamter.timeout_heating  < 180)
+            {
+                StoRunParamter.timeout_heating = 300;
+            }
+            else if(StoRunParamter.timeout_heating  > 1200)
+            {
+                StoRunParamter.timeout_heating  = 300;
+            }            
+            timeout_heating = StoRunParamter.timeout_heating;
+
+            pbc_reload_timerClock(&timer_timeout,timeout_heating);
             app_pull_increment_um();  //measure clean
             tester_stateMachine = tester_sme_measure;
             app_push_local_gui_sm(mgs_ms_measuring);
@@ -549,9 +562,12 @@ void app_entry_stopAndUnload(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_push_voltage_select(sdt_int16u in_voltage)
 {
-    local_voltage_level = (voltage_level_def)in_voltage;
-    StoRunParamter.select_voltage = in_voltage;
-    app_push_once_save_sto_parameter();
+    if(in_voltage != local_voltage_level)
+    {
+        local_voltage_level = (voltage_level_def)in_voltage;
+        StoRunParamter.select_voltage = in_voltage;
+        app_push_once_save_sto_parameter();      
+    }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 sdt_int16u app_pull_voltage_select(void)
@@ -561,9 +577,12 @@ sdt_int16u app_pull_voltage_select(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_push_product_select(sdt_int16u in_type)
 {
-    local_product = (product_type_def)in_type;
-    StoRunParamter.select_product = in_type;
-    app_push_once_save_sto_parameter();
+    if(in_type != local_product)
+    {
+        local_product = (product_type_def)in_type;
+        StoRunParamter.select_product = in_type;
+        app_push_once_save_sto_parameter();        
+    }
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 sdt_int16u app_pull_porduct_select(void)
