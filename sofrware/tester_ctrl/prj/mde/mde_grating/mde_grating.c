@@ -17,7 +17,7 @@ static void grating_task(grating_oper_def* mix_oper)
     sdt_int8u rd_pulse_ABZ;
     sdt_int8u rd_pulse_AB;
     sdt_bool rd_pulse_Z;
-    sdt_bool dir_add = sdt_false;
+    static sdt_bool dir_add = sdt_false;
 
     while(1)
     {

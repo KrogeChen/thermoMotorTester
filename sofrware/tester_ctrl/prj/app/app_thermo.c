@@ -27,6 +27,17 @@ typedef struct
     timerClock_def     timer_brake;
 }wmotor_para_def;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#define light_led_out 9
+//-----------------------------------------------------------------------------
+static void light_led_is_on(void)
+{
+    mde_ouput_port(light_led_out,sdt_true);
+}
+//-----------------------------------------------------------------------------
+static void light_led_is_off(void)
+{
+    mde_ouput_port(light_led_out,sdt_false);
+}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static wmotor_para_def wmotor_para;
 //-----------------------------------------------------------------------------
@@ -346,6 +357,7 @@ void app_thermoMotor_ts(void)
     {
         stop_weight_moto();  //停电机
         thermoMotor_heat_disable();
+        light_led_is_off();
         tester_stateMachine = tester_sme_idle;
         wmotor_para.wmotor_states = wmotor_ste_idle;
     }
@@ -386,6 +398,7 @@ void app_thermoMotor_ts(void)
         case tester_sme_strHeat:
         {
             thermoMotor_heat_enable();
+            light_led_is_on();
             measure_now = 0;
             measure_max = 0;
             temperature_now = app_pull_pt100_temperature(0);
@@ -420,7 +433,7 @@ void app_thermoMotor_ts(void)
                 pbc_reload_timerClock(&timer_measue_period,1000);
                 time_second ++;
                 measure_now += app_pull_increment_um();
-                if(locked_max < 30)
+                if(locked_max < 30)              //30s 无变化，锁定最大值
                 {
                     if(measure_max <= measure_now)
                     {
@@ -429,7 +442,10 @@ void app_thermoMotor_ts(void)
                     }
                     else
                     {
-                        locked_max ++;
+                        if(measure_max > 1000)
+                        {
+                            locked_max ++;
+                        }
                     }                    
                 }
                 if(0 == second_for_3500um)
@@ -455,12 +471,14 @@ void app_thermoMotor_ts(void)
         {
 
             thermoMotor_heat_disable();
+            light_led_is_off();
             tester_stateMachine = tester_sme_complete;
             break;
         }
         case tester_sme_abortAndUnload:
         {
             thermoMotor_heat_disable();
+            light_led_is_off();
             tester_stateMachine = tester_sme_unload;
             break;
         }

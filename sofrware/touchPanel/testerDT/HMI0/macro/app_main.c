@@ -211,6 +211,8 @@ pbulic_para_def  pbulic_para;
 #define window_index_addr        12//1 word,显示窗口索引
 #define measure_states_addr      13//1 word,测量状态
 
+#define measure_um_addr          14//1 word,光栅绝对值
+
 #define public_ram_addr          100//100word,全局ram,用于存储全局变量
 //--------------------------------------
 //LB内存分配
@@ -222,6 +224,7 @@ pbulic_para_def  pbulic_para;
 
 #define chart_pause_addr      20
 #define chart_clear_addr      21
+#define runing_states_addr    22
 //++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++
@@ -276,14 +279,14 @@ int MacroEntry()
 //显示框地址，测量值
     signed int rd_measure_um;
 //    
-//    rd_measure_um = ops_modbus_reg[regAddr_m_msrGt_um_0];
-//    rd_measure_um = rd_measure_um<<16;
-//    rd_measure_um |= ops_modbus_reg[regAddr_m_msrGt_um_1];
-//    
+    rd_measure_um = ops_modbus_reg[regAddr_m_msrGt_um_0];
+    rd_measure_um = rd_measure_um<<16;
+    rd_measure_um |= ops_modbus_reg[regAddr_m_msrGt_um_1];
+    
     float s_measure_um;
 //    
-//    s_measure_um = (float)rd_measure_um/1000;
-//    WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
+    s_measure_um = (float)rd_measure_um/1000;
+    WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
 //-----------------------------------------------------------------------
 //最大值
     signed int rd_max_um;
@@ -294,10 +297,20 @@ int MacroEntry()
     rd_max_measure_um = (float)rd_max_um/1000;
     WriteLocal("LW",dis_max_stroke_addr,2,&rd_max_measure_um,0);
 //-----------------------------------------------------------------------
+    signed int rd_um;
+    rd_um = ops_modbus_reg[regAddr_m_grating_pds_0];
+    rd_um = rd_max_um<<16;
+    rd_um |= ops_modbus_reg[regAddr_m_grating_pds_1];
+    float rd_um_pds;
+    rd_um_pds = (float)rd_um/1000;
+    WriteLocal("LW",measure_um_addr,2,&rd_um,0);
+    
+
+//-----------------------------------------------------------------------
 //3.5mm的时间
     unsigned short rd_35t_second;
     rd_35t_second = ops_modbus_reg[regAddr_m_second_3_5T];
-    //WriteLocal("LW",dis_s_35_stroke_addr,1,&rd_35t_second ,0);
+    WriteLocal("LW",dis_s_35_stroke_addr,1,&rd_35t_second ,0);
 //-----------------------------------------------------------------------
 //测量时间 
     unsigned short m_second;
@@ -307,23 +320,23 @@ int MacroEntry()
 //-----------------------------------------------------------------------
     unsigned short show_states = MSS_S_IDLE;
     unsigned short local_win_index;
-    unsigned short runing;
+    unsigned short runing = 0;
     
     
-    pbulic_para.one_second ++;
-    if(pbulic_para.one_second > 9)
-    {
-        pbulic_para.one_second = 0;
-
-        pbulic_para.test_s ++;
-        pbulic_para.test_f += 0.05;
-    
-             
-    }
-    pbulic_para.main_gui_menu = mgm_measure;
-    ops_modbus_reg[regAddr_m_gui_sm] = mgs_ms_measuring;
-    m_second = pbulic_para.test_s;
-    s_measure_um = pbulic_para.test_f;   
+//   pbulic_para.one_second ++;
+//   if(pbulic_para.one_second > 9)
+//   {
+//       pbulic_para.one_second = 0;
+//
+//       pbulic_para.test_s ++;
+//       pbulic_para.test_f += 0.05;
+//   
+//            
+//   }
+//   //pbulic_para.main_gui_menu = mgm_measure;
+//   ops_modbus_reg[regAddr_m_gui_sm] = mgs_ms_measuring;
+//   m_second = pbulic_para.test_s;
+//   s_measure_um = pbulic_para.test_f;   
     
     
     
@@ -343,6 +356,7 @@ int MacroEntry()
             }
             case mgm_select:
             {
+                local_win_index = WIN_SELECT;
                 if(key_select_ok)
                 {
                     key_select_ok = 0;
@@ -359,8 +373,12 @@ int MacroEntry()
             }
             case mgm_measure:
             {
+                local_win_index = WIN_MEASURE;
                 if(key_setup)
                 {
+                    WriteLocal("LW",par_volatge_sel_addr,1,&ops_modbus_reg[regAddr_m_select_voltage] ,0);
+                    WriteLocal("LW",par_product_sel_addr,1,&ops_modbus_reg[regAddr_m_select_product] ,0);
+                    WriteLocal("LW",par_heat_time_addr,1,&ops_modbus_reg[regAddr_m_timeout_heating] ,0);
                     pbulic_para.main_gui_menu = mgm_select;
                     ops_modbus_reg[regAddr_m_gui_menu] = mgm_select;  //退回到选择界面
                 }
@@ -383,7 +401,6 @@ int MacroEntry()
                         if(pbulic_para.son_measure_menu != ops_modbus_reg[regAddr_m_gui_sm])
                         {
                             pbulic_para.son_measure_menu = ops_modbus_reg[regAddr_m_gui_sm];
-                            runing = 1;
                             chart_pause = 1;
                             chart_clear = 1;
                             m_second = 0;
@@ -391,6 +408,7 @@ int MacroEntry()
                             WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
                             WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
                         }
+                        runing = 1;
                         show_states = MSS_S_DOWN_W;
                         
   
@@ -398,10 +416,10 @@ int MacroEntry()
                     }
                     case mgs_ms_measuring:
                     {
+                        
                         if(pbulic_para.son_measure_menu != ops_modbus_reg[regAddr_m_gui_sm])
                         {
                             pbulic_para.son_measure_menu = ops_modbus_reg[regAddr_m_gui_sm];
-                            runing = 1;
                             chart_pause = 0;
                             chart_clear = 0;
                             pbulic_para.backup_second = 0;
@@ -418,17 +436,17 @@ int MacroEntry()
                                 WriteLocal("LW",chart_X_second_addr,1,&m_second,0);
                                 WriteLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
                                 
-                                 ReadLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
+                                 //ReadLocal("LW",chart_Y_mm_addr,2,&s_measure_um,0);
                                 
-                                WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
-                                WriteLocal("LW",dis_s_35_stroke_addr,1,&m_second ,0);
+                                //WriteLocal("LW",dis_measure_stroke_addr,2,&s_measure_um ,0);
+                                //WriteLocal("LW",dis_s_35_stroke_addr,1,&m_second ,0);
                             }
                         }
-                        
+                        runing = 1;
                         show_states = MSS_S_MEASURE;
                         if(key_stop)
                         {
-                            modbus_rw[regAddr_m_event_bits] = bits_mEBits_stop;
+                            ops_modbus_reg[regAddr_m_event_bits] = bits_mEBits_stop;
                         }
                         break;
                     }
@@ -511,7 +529,9 @@ int MacroEntry()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //-----------------------------------------------------------------------
-
+    WriteLocal("LB",chart_pause_addr,1,&chart_pause,0);
+    WriteLocal("LB",chart_clear_addr,1,&chart_clear,0);
+    WriteLocal("LB",runing_states_addr,1,&runing,0);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     WriteLocal("LW",measure_states_addr,1,&show_states,0);
     WriteLocal("LW",window_index_addr,1,&local_win_index,0);

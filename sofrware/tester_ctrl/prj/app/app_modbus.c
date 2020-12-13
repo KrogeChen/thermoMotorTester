@@ -103,7 +103,7 @@ void app_modbus_task(void)
                     case regAddr_m_grating_pds_0:
                     {
                         app_pull_site_um(&rd_um);
-                        reg_detailes = rd_um;
+                        reg_detailes = rd_um >> 16;
                         break;
                     }
                     case regAddr_m_grating_pds_1:
