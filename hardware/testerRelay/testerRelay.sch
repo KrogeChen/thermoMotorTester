@@ -427,9 +427,7 @@ Wire Wire Line
 	11472 8270 11147 8270
 Connection ~ 11872 8645
 Wire Wire Line
-	10572 8270 10572 8870
-Wire Wire Line
-	10572 8870 12072 8870
+	10572 8870 11150 8870
 Wire Wire Line
 	12072 8870 12072 8370
 Wire Wire Line
@@ -1448,4 +1446,72 @@ Text Label 2340 6985 2    50   ~ 0
 CK7
 Text Label 2340 7200 2    50   ~ 0
 CK8
+$Comp
+L kicad_symbol_general:R_Small_US R11
+U 1 1 5FF0934A
+P 12070 9010
+F 0 "R11" H 12274 9056 50  0000 R CNN
+F 1 "1k" H 12222 8978 50  0000 R CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" H 12070 9010 50  0001 C CNN
+F 3 "" H 12070 9010 50  0001 C CNN
+	1    12070 9010
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	12070 8910 12070 8870
+Connection ~ 12070 8870
+Wire Wire Line
+	12070 8870 12072 8870
+$Comp
+L power:GND #PWR?
+U 1 1 5FF2006B
+P 12070 9140
+F 0 "#PWR?" H 12070 8890 50  0001 C CNN
+F 1 "GND" H 12075 8967 50  0000 C CNN
+F 2 "" H 12070 9140 50  0001 C CNN
+F 3 "" H 12070 9140 50  0001 C CNN
+	1    12070 9140
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	12070 9140 12070 9110
+$Comp
+L kicad_symbol_general:R_Small_US R12
+U 1 1 5FF35583
+P 11250 8870
+F 0 "R12" V 11335 9050 50  0000 R CNN
+F 1 "3.6k" V 11330 8880 50  0000 R CNN
+F 2 "kicad_footprint_general:R_0603_1608Metric" H 11250 8870 50  0001 C CNN
+F 3 "" H 11250 8870 50  0001 C CNN
+	1    11250 8870
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	11350 8870 11648 8870
+$Comp
+L Device:C_Small C15
+U 1 1 5FF35B26
+P 11260 9140
+F 0 "C15" V 11310 9200 50  0000 L CNN
+F 1 "3.3nF" V 11316 8882 50  0000 L CNN
+F 2 "kicad_footprint_general:C_0603_1608Metric" H 11260 9140 50  0001 C CNN
+F 3 "~" H 11260 9140 50  0001 C CNN
+F 4 "50V" H 11260 9140 50  0001 C CNN "Voltage"
+	1    11260 9140
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	10572 9140 11160 9140
+Wire Wire Line
+	10572 8270 10572 8870
+Connection ~ 10572 8870
+Wire Wire Line
+	10572 8870 10572 9140
+Wire Wire Line
+	11360 9140 11648 9140
+Wire Wire Line
+	11648 9140 11648 8870
+Connection ~ 11648 8870
+Wire Wire Line
+	11648 8870 12070 8870
 $EndSCHEMATC

@@ -171,6 +171,16 @@ void app_modbus_task(void)
                         reg_detailes = StoRunParamter.timeout_heating;
                         break;
                     }
+                    case regAddr_m_second_2_5T:
+                    {
+                        reg_detailes = app_pull_second_2_5T();
+                        break;
+                    }
+                    case regAddr_m_slope_angle:
+                    {
+                        reg_detailes = app_pull_slope_angle();
+                        break;
+                    }
                     default:
                     {
                         reg_detailes = 0;

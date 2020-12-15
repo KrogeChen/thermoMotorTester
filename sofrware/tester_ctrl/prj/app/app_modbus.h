@@ -72,6 +72,8 @@ typedef struct
 #define regAddr_m_temperature_now  0x0016  //当前PTC温度
 #define regAddr_m_temperature_max  0x0017  //最大PTC温度
 #define regAddr_m_timeout_heating  0x0018  //加热时间
+#define regAddr_m_second_2_5T      0x0019  //2.5行程时间
+#define regAddr_m_slope_angle      0x001A  //曲线上升角度
 //-----------------------------------------------------------------------------
 void app_modbus_task(void);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

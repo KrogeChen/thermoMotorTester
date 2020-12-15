@@ -1,5 +1,6 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #include ".\app_cfg.h"
+#include "math.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typedef enum
 {
@@ -342,6 +343,9 @@ static sdt_int16u time_second;
 static sdt_int16u second_for_3500um;
 static sdt_int16s temperature_now;
 static sdt_int16s temperature_max;
+static sdt_int16u slope_angle;        //上升曲线相角
+static sdt_int16u second_for_2500um;  //2.5mm时间
+static sdt_int16u second_for_1000um;  //1mm时间
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void app_thermoMotor_ts(void)
 {
@@ -406,6 +410,9 @@ void app_thermoMotor_ts(void)
             time_second = 0;
             locked_max = 0;
             second_for_3500um = 0;
+            second_for_2500um = 0;
+            second_for_1000um = 0;
+            slope_angle = 0;
             pbc_reload_timerClock(&timer_measue_period,1000);
             
             
@@ -448,6 +455,34 @@ void app_thermoMotor_ts(void)
                         }
                     }                    
                 }
+                static sdt_int32s nearly_1000um;
+                static sdt_int32s nearly_2500um;
+                if(0 == second_for_1000um)
+                {
+                    if(measure_now >= 1000)
+                    {
+                        second_for_1000um = time_second;
+                        nearly_1000um = measure_now;
+                    }
+                }
+                if(0 == second_for_2500um)
+                {
+                    if(measure_now >= 2500)
+                    {
+                        second_for_2500um = time_second;
+                        nearly_2500um = measure_now;
+                        
+                        double k_slope;
+                        #define pix_mul  45//X Y的屏幕像素倍率
+                        double val;
+                        val =180/3.14159;  //弧度角度转换系数
+                        
+                        k_slope = ((double)(nearly_2500um - nearly_1000um)/1000*pix_mul)/(double)(second_for_2500um - second_for_1000um);
+                        slope_angle = (sdt_int16u)((atan(k_slope)*val)*10); //0.1度的角度值
+                    }
+                }
+
+            
                 if(0 == second_for_3500um)
                 {
                     if(measure_now >= 3500)
@@ -631,5 +666,15 @@ void app_push_auto_unload(void)
 sdt_int16u app_pull_second_3_5T(void)
 {
     return(second_for_3500um);
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+sdt_int16u app_pull_second_2_5T(void)
+{
+    return(second_for_2500um);
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+sdt_int16u app_pull_slope_angle(void)
+{
+    return(slope_angle);
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

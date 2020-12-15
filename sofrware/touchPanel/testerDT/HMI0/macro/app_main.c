@@ -196,6 +196,8 @@ pbulic_para_def  pbulic_para;
 #define regAddr_m_temperature_now  0x0016  //当前PTC温度
 #define regAddr_m_temperature_max  0x0017  //最大PTC温度
 #define regAddr_m_timeout_heating  0x0018  //加热时间
+#define regAddr_m_second_2_5T      0x0019  //2.5行程时间
+#define regAddr_m_slope_angle      0x001A  //曲线上升角度
 //++++++++++++++++++++++++++++++++++++++
 //LW内存分配
 //窗口参数:电压选择、产品选择、加热时间选择
@@ -210,8 +212,8 @@ pbulic_para_def  pbulic_para;
 #define par_heat_time_addr       11//1 word,加热时间
 #define window_index_addr        12//1 word,显示窗口索引
 #define measure_states_addr      13//1 word,测量状态
+#define ht_slope_angle_addr      14//1 word,曲线上升角度,屏幕像素比
 
-#define measure_um_addr          14//1 word,光栅绝对值
 
 #define public_ram_addr          100//100word,全局ram,用于存储全局变量
 //--------------------------------------
@@ -297,20 +299,20 @@ int MacroEntry()
     rd_max_measure_um = (float)rd_max_um/1000;
     WriteLocal("LW",dis_max_stroke_addr,2,&rd_max_measure_um,0);
 //-----------------------------------------------------------------------
-    signed int rd_um;
-    rd_um = ops_modbus_reg[regAddr_m_grating_pds_0];
-    rd_um = rd_max_um<<16;
-    rd_um |= ops_modbus_reg[regAddr_m_grating_pds_1];
-    float rd_um_pds;
-    rd_um_pds = (float)rd_um/1000;
-    WriteLocal("LW",measure_um_addr,2,&rd_um,0);
-    
-
+//2.5mm的时间
+    unsigned short rd_25t_second;
+    rd_25t_second = ops_modbus_reg[regAddr_m_second_2_5T];
+    WriteLocal("LW",dis_s_25_stroke_addr,1,&rd_25t_second ,0);
 //-----------------------------------------------------------------------
 //3.5mm的时间
     unsigned short rd_35t_second;
     rd_35t_second = ops_modbus_reg[regAddr_m_second_3_5T];
     WriteLocal("LW",dis_s_35_stroke_addr,1,&rd_35t_second ,0);
+//-----------------------------------------------------------------------
+//曲线上升角度
+    unsigned short rd_angle;
+    rd_angle = ops_modbus_reg[regAddr_m_slope_angle];
+    WriteLocal("LW",ht_slope_angle_addr,1,&rd_angle ,0);
 //-----------------------------------------------------------------------
 //测量时间 
     unsigned short m_second;
