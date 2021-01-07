@@ -23,7 +23,7 @@ void mde_upgrade_files_task(void);
 //入口:块序号、块数据指针，块大小默认为128bytes
 //出口:错误指示
 
-sdt_int8u mde_push_files_one_block(sdt_int8u in_block_num,sdt_int8u* in_pBuff);
+sdt_int16u mde_push_files_one_block(sdt_int16u in_block_num,sdt_int8u* in_pBuff);
 //--------------------------------------------------------------------------------------------------------------------------
 //名称:推入文件分布maps数据到文件模块
 //入口:map数据指针(128bytes)，是否续传 sdt_true 续传

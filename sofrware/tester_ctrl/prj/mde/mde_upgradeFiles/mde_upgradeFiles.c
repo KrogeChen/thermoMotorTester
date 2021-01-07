@@ -3,7 +3,6 @@
 #include ".\mde_upgradeFiles.h"
 #include "..\..\pbc\pbc_sysTick\pbc_sysTick.h"
 #include "..\..\pbc\pbc_dataConvert\pbc_dataConvert.h"
-#include "..\..\mde\mde_watchdog\mde_watchdog.h"
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //fireware update task
 //-------------------------------------------------------------------------------------------------
@@ -271,7 +270,7 @@ sdt_int8u mde_push_fileMap(sdt_int8u* in_pBuff,sdt_bool in_resume)
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //-------------------------------------------------------------------------------------------------
-sdt_int8u mde_push_files_one_block(sdt_int8u in_block_num,sdt_int8u* in_pBuff)
+sdt_int16u mde_push_files_one_block(sdt_int16u in_block_num,sdt_int8u* in_pBuff)
 {
     sdt_int8u buff_block[128];
     sdt_int8u i;
